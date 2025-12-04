@@ -17,8 +17,15 @@ public class UserController {
     UserServiceImpl userServiceImpl;
 
     @PostMapping("/signup")
-    public Result login(@RequestBody User user){
+    public Result signup(@RequestBody User user){
         userServiceImpl.signup(user);
         return Result.success();
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody User user){
+        User data = userServiceImpl.login(user);
+
+        return Result.success(data);
     }
 }
