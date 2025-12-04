@@ -31,7 +31,8 @@
 
   const images = import.meta.glob('/src/images/*.jpg',{
     eager:true,
-    as:'url'
+    query:'?url',
+    import:'default'
   });
 
   function getResource(filename:string)

@@ -25,7 +25,11 @@ import { reactive, ref } from 'vue';
 import { DialogStatus } from '@/constants/DialogStatus';
 import type { ProductInfo } from '@/interface/DialogInfo';
 
-const images = import.meta.glob('/src/photos/*',{eager:true,as:'url'});
+const images = import.meta.glob('/src/photos/*',{
+  eager:true,
+  query:'?url',
+  import:'default'
+});
 
 const productList = [
     {
@@ -75,8 +79,8 @@ const productList = [
     }
 ];
 
-const getImageUrl = (name:string) => {
-  return images[`/src/photos/${name}`];
+const getImageUrl = (name:string):string => {
+  return images[`/src/photos/${name}`] as string;
 }
 
 let dialogShowType = ref(DialogStatus.hide);
@@ -90,7 +94,9 @@ let dialogMessage:ProductInfo = reactive({
 function showDetail(value:ProductInfo){
 
   dialogMessage.name = value.name
-  dialogMessage.img = getImageUrl(value.img) || ''
+  //类型守卫：a = b === 'string' ? b : ''
+  //类型断言 a = b as string
+  dialogMessage.img = getImageUrl(value.img);
   dialogMessage.price = value.price
 
   dialogShowType.value = DialogStatus.show
