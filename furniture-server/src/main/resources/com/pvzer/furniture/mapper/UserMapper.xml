@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.mybatis.example.BlogMapper">
+<mapper namespace="com.pvzer.furniture.mapper.UserMapper">
   <insert id="signup">
     insert into users(username,password,email,name,telephone,gender,
                       birthday,create_time,update_time)
