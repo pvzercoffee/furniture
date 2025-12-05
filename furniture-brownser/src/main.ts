@@ -5,8 +5,6 @@ import '@/styles/global.css'
 import {createPinia} from 'pinia'
 import router from './router';
 
-
-
 //创建pinia
 const pinia = createPinia();
 

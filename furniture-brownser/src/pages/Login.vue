@@ -32,8 +32,6 @@
                 <button type="button" class="btn-yellow" @click="signup" id="btn_register">注册</button>
               </div>
 
-
-
             </form>
         </div>
       </div>
@@ -45,6 +43,7 @@ import { HintColors } from '@/constants/HintColors';
 import { ref } from 'vue';
 import '@/styles/loginAndSignup.css'
 import { useRouter } from 'vue-router';
+import { useUserMessage } from '@/store/userMessage';
 
 const InputLimit = {
   nameMaxLength : 16,
@@ -59,8 +58,14 @@ let username = ref('');
 let password = ref('');
 let hint = ref('');
 let hintColor = ref(HintColors.normal)
+
+const userMessage = useUserMessage();
+
 function login(){
   inputVerify();
+
+  userMessage.login();
+
 }
 
 function inputVerify(){
