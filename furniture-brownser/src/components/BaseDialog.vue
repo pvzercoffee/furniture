@@ -1,9 +1,9 @@
 <template>
-<div class="dialog">
+<div v-show="isShow" class="dialog">
     <div class="dialog-main">
         <div class="dialog-head">
             <span class="dialog-title">{{ name }}</span>
-            <button class="dialog-button" @click="sendClose">关闭</button>
+            <button class="dialog-button" @click="hide">关闭</button>
         </div>
         <img :src="img" class="dialog-detail">
     </div>
@@ -11,8 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { DialogStatus } from '@/constants/DialogStatus';
-import { toRefs } from 'vue';
+import { ref, toRefs } from 'vue';
 
 const props = defineProps<{
   message:{
@@ -24,13 +23,22 @@ const props = defineProps<{
 
 const {name,img,price} = toRefs(props.message);
 
-const emit = defineEmits(['send']);
+let isShow = ref(false);
 
-
-
-function sendClose(){
-  emit('send',DialogStatus.hide);
+const show = () => {
+  isShow.value = true;
+  console.log("显示");
 }
+
+function hide(){
+  isShow.value = false;
+}
+
+//暴露给父组件控制
+defineExpose({
+  show,
+  hide
+});
 </script>
 
 <style scoped>
