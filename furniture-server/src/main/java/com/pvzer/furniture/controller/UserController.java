@@ -2,10 +2,8 @@ package com.pvzer.furniture.controller;
 
 import com.pvzer.furniture.pojo.Result;
 import com.pvzer.furniture.pojo.User;
-import com.pvzer.furniture.service.UserService;
 import com.pvzer.furniture.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

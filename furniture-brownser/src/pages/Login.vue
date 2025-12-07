@@ -43,7 +43,8 @@ import { HintColors } from '@/constants/HintColors';
 import { ref } from 'vue';
 import '@/styles/loginAndSignup.css'
 import { useRouter } from 'vue-router';
-import { useUserMessage } from '@/store/userMessage';
+import { userMessage } from '@/store/userMessage';
+import { toastStore } from '@/store/toastStore';
 
 const InputLimit = {
   nameMaxLength : 16,
@@ -58,17 +59,26 @@ let username = ref('');
 let password = ref('');
 let hint = ref('');
 let hintColor = ref(HintColors.normal)
+const useToastStore = toastStore();
 
-const userMessage = useUserMessage();
+const loginInfo = userMessage();
 
-function login(){
-  inputVerify();
+async function login(){
+  if(!inputVerify()) return;
 
-  userMessage.login();
+  try{
+    await loginInfo.login(username.value,password.value);
+    const {username:user} = loginInfo.userMessage;
+    useToastStore.show("登录成功！欢迎回来，"+user);
+
+  }catch(error){
+    if(error instanceof Error) useToastStore.show(error.message);
+
+  }
 
 }
 
-function inputVerify(){
+function inputVerify():boolean{
 
   const nameLength = username.value.length;
   const pwdLength = password.value.length;
@@ -87,6 +97,7 @@ function inputVerify(){
 
   hintColor.value = isVerify ? HintColors.legal : HintColors.illegal;
 
+  return isVerify;
 }
 const router = useRouter();
 function signup(){

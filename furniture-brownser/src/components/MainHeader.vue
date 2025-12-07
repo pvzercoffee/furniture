@@ -1,7 +1,7 @@
 <template>
 <div class="main-header">
     <header>
-        <span class="title-small">欢迎来到精美家居</span>
+        <span class="title-small">{{ title }}</span>
         <!-- <div id="header-message"> -->
             <div class="icon icon_telephone header-icon">
                 <span class="text-small">400-200-500</span>
@@ -15,6 +15,24 @@
 </template>
 
 <script lang="ts" setup>
+import { userMessage } from '@/store/userMessage';
+import { storeToRefs } from 'pinia';
+import { ref, watch } from 'vue';
+let title = ref('欢迎来到精美家具');
+const loginInfo = storeToRefs(userMessage())
+const isLogin = ref(loginInfo.isLogin);
+
+watch(isLogin,()=>{
+  if(isLogin){
+    title.value = loginInfo.userMessage.value.name + '，欢迎来到精美家居';
+  }
+  else{
+    title.value = '欢迎来到精美家居';
+  }
+
+});
+
+
 
 </script>
 
