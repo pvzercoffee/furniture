@@ -1,4 +1,5 @@
 import { login } from "@/api/login.api";
+import type { LoginInfo } from "@/interface/LoginInfo";
 import type { ResultInfo } from "@/interface/ResultInfo";
 import type { UserInfo } from "@/interface/UserInfo";
 import { defineStore } from "pinia";
@@ -9,10 +10,11 @@ export const userMessage = defineStore('userMessage',{
     async login(username:string,password:string){
       const result:ResultInfo = await login(username,password);
 
-      const data:UserInfo = result.data;
+      const data:LoginInfo = result.data as LoginInfo;
 
       if(data == null) throw new Error("用户名或密码错误");
 
+      console.log(data);
       this.userMessage = data;
       this.isLogin = true;
     }
@@ -20,10 +22,8 @@ export const userMessage = defineStore('userMessage',{
 
   state(){
     return{
-      userMessage:<UserInfo>{
+      userMessage:<LoginInfo>{
         id:0,
-        status:0,
-        role:0,
         username:'',
         password:'',
         email:'',
@@ -31,9 +31,6 @@ export const userMessage = defineStore('userMessage',{
         telephone:'',
         gender:'',
         birthday:'',
-        createTime:'',
-        updateTime:'',
-        lastLogin:'',
 
       },
       isLogin:false
