@@ -1,5 +1,6 @@
 package com.pvzer.furniture.mapper;
 
+import com.pvzer.furniture.pojo.LoginInfo;
 import com.pvzer.furniture.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

@@ -1,5 +1,6 @@
 package com.pvzer.furniture.controller;
 
+import com.pvzer.furniture.pojo.LoginInfo;
 import com.pvzer.furniture.pojo.Result;
 import com.pvzer.furniture.pojo.User;
 import com.pvzer.furniture.service.impl.UserServiceImpl;
@@ -22,7 +23,7 @@ public class UserController {
 
     @PostMapping("/login")
     public Result login(@RequestBody User user){
-        User data = userServiceImpl.login(user);
+        LoginInfo data = userServiceImpl.login(user);
 
         return Result.success(data);
     }

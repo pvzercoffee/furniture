@@ -2,11 +2,17 @@ package com.pvzer.furniture.service.impl;
 
 
 import com.pvzer.furniture.config.SecurityConfig;
+import com.pvzer.furniture.exception.SelectErrorException;
 import com.pvzer.furniture.mapper.UserMapper;
+import com.pvzer.furniture.pojo.LoginInfo;
 import com.pvzer.furniture.pojo.User;
 import com.pvzer.furniture.service.UserService;
+import com.pvzer.furniture.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,16 +32,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(User user) {
+    public LoginInfo login(User user) {
 
+        //LoginInfo不下发密码，因此查询结果用User封装
         User result =  userMapper.login(user);
 
-        if(result != null && securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()))
+        System.out.println("tesy");
+        System.out.println(securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()));
+
+        //密码错误抛异常
+        if(result == null || !securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()))
         {
-            result.setPassword(null);
-            return result;
+
+            throw new SelectErrorException();
         }
 
-        return null;
+        //密码正确的情况下封装LoginInfo
+        LoginInfo loginInfo = new LoginInfo();
+
+        loginInfo.setId(result.getId());
+        loginInfo.setEmail(result.getEmail());
+        loginInfo.setName(result.getName());
+        loginInfo.setGender(result.getGender());
+        loginInfo.setTelephone(result.getTelephone());
+        loginInfo.setUsername(result.getUsername());
+
+        //把id和username作为令牌载荷
+        Map<String,Object> claims = new HashMap<>();
+        claims.put("id",loginInfo.getId());
+        claims.put("username",loginInfo.getUsername());
+
+        //创建令牌并传给LoginInfo
+        loginInfo.setToken(JwtUtils.generateToken(claims));
+        //登陆成功会返回信息和和令牌，不成功则是一个null
+        return loginInfo;
     }
 }
