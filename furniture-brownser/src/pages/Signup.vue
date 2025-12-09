@@ -105,7 +105,7 @@ let infoHint = reactive({
 
 
 async function submitSignup(){
-  inputVerify();
+  if(!inputVerify()) return;
   await userMessage().signup(userInfo);
 
 }

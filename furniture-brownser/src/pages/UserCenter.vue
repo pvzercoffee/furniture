@@ -93,7 +93,7 @@ watch(userData.isLogin,()=>{
 }
 .click-text{
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 0px;
   text-decoration: underline;
   color: chocolate;
   border: 0;

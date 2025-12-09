@@ -15,13 +15,13 @@
               <div class="card-empty"></div>
               <div class="card-right">
                   <h3 class="text-big">您可以留下您宝贵的意见，我们会在第一时间回复您，谢谢关注！</h3>
-                  <form action="#" method="post">
+                  <form ref="mainForm">
                       <h4 class="font-text">您的姓名<span class="redstar">*</span></h4>
-                      <input type="text" autocomplete="name">
+                      <input type="text" required autocomplete="name">
                       <h4 class="font-text">您的电话<span class="redstar">*</span></h4>
-                      <input type="text" autocomplete="tel">
+                      <input type="text" required autocomplete="tel">
                       <h4 class="font-text">您的邮箱<span class="redstar">*</span></h4>
-                      <input type="text" autocomplete="email">
+                      <input type="text" required autocomplete="email">
                       <h4 class="font-text">咨询项目<span class="redstar">*</span></h4>
 
                       <span class="font-text">
@@ -35,9 +35,9 @@
 
                       <h4 class="font-text"style="margin-top: 60px;">咨询内容<span class="redstar">*</span></h4>
                       <p class="font-text" id="word_count" :style="{'color':hintColor}">{{ hint }}</p>
-                      <textarea id="msg_area" v-model="msg"></textarea>
+                      <textarea id="msg_area" required v-model="msg"></textarea>
                       <br>
-                      <input type="submit" value="提交">
+                      <input type="button" value="提交" @click="submit">
                   </form>
 
               </div>
@@ -49,12 +49,14 @@
 
 import Carousel from '@/components/Carousel.vue';
 import { HintColors } from '@/constants/HintColors';
+import { toastStore } from '@/store/toastStore';
+import { userMessage } from '@/store/userMessage';
 import '@/styles/board.css'
+import { storeToRefs } from 'pinia';
 import { computed, reactive, ref, watch } from 'vue';
 
-
+//产品展示的数据
 const categoryList = reactive([
-
 {
   item: '床上用品',
   value: 'bedding',
@@ -87,6 +89,7 @@ const categoryList = reactive([
 }
 ]);
 
+//watch监测全选按钮，实现全反选
 const isSelectAll = ref(false);
 
 watch(isSelectAll,()=>{
@@ -95,6 +98,7 @@ categoryList.forEach((value,index)=>{
 });
 })
 
+//computed响应式计算还能写几个字
 const maxInput = 100;
 let hintColor = ref(HintColors.normal)
 
@@ -105,6 +109,7 @@ const words = computed(()=>{
 return maxInput - msg.value.length
 });
 
+//渲染字数情况给页面
 watch(words,()=>{
 if(words.value < 0)
 {
@@ -117,5 +122,23 @@ hint.value = `您还可以输入${words.value}个字`
 hintColor.value = HintColors.legal
 
 });
+
+//提交留言
+let mainForm = ref<HTMLInputElement|null>(null);
+
+
+
+function submit(){
+
+  if(!userMessage().isLogin){
+    toastStore().show("登录后才能留言");
+    return;
+  }
+
+  if(!mainForm.value?.reportValidity()){
+    toastStore().show("请填写完整信息");
+    return;
+  }
+}
 
 </script>

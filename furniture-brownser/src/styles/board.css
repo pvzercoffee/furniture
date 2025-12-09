@@ -46,7 +46,7 @@ form>input[type='text']{
   height: 40px;
   margin-bottom: 30px;
 }
-form>input[type='submit']{
+form>input[type='submit'],form>input[type='button']{
   width: 70%;
   height: 40px;
   margin-top: 30px;
@@ -54,7 +54,7 @@ form>input[type='submit']{
   background-color: rgb(29, 141, 167);
   border: 0;
 }
-form>input[type='submit']:hover{
+form>input[type='submit']:hover,form>input[type='button']:hover{
 
   background-color: rgb(25, 121, 142);
 }

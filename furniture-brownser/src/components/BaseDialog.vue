@@ -27,7 +27,6 @@ let isShow = ref(false);
 
 const show = () => {
   isShow.value = true;
-  console.log("显示");
 }
 
 function hide(){
