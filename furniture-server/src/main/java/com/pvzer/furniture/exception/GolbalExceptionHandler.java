@@ -8,7 +8,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GolbalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result handlerException(Exception e){
-        System.out.println(e.getMessage());
+
+        System.out.println("来自拦截器的输出："+e.getMessage());
+
+        if(e.getMessage().contains("for key 'username'")) {
+            return Result.error("这个用户名已经被使用了，换一个吧");
+        }
+        if(e.getMessage().contains("for key 'email'")) {
+            return Result.error("该邮箱已被注册");
+        }
+        if(e.getMessage().contains("for key 'telephone'")) {
+            return Result.error("手机号已被注册");
+        }
         return Result.error("出错了，请联系管理员");
     }
 

@@ -26,7 +26,7 @@ public class JwtUtils {
                 .compact();
     }
 
-    private static Claims parseToken(String token)
+    public static Claims parseToken(String token)
     {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)

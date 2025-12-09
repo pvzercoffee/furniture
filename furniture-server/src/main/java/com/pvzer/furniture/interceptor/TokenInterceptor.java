@@ -1,5 +1,6 @@
 package com.pvzer.furniture.interceptor;
 
+import com.pvzer.furniture.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,15 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        return false;
+        String token = request.getHeader("token");
+
+        //验证令牌有效性
+        try{
+            JwtUtils.parseToken(token);
+            return true;
+        }catch(RuntimeException e){
+            return false;
+        }
     }
 
     @Override
