@@ -79,7 +79,7 @@
 import Carousel from '@/components/Carousel.vue';
 import { reactive, ref } from 'vue';
 import '@/styles/loginAndSignup.css'
-import { userMessage } from '@/store/userMessage';
+import { userMessage } from '@/store/userStore';
 import type { SignupInfo } from '@/interface/User';
 
 

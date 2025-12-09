@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     TokenInterceptor tokenInterceptor;
 
-    String[] allowList = {"/login","/signup"};
+    String[] allowList = {"/login","/signup","/message/queryItem"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

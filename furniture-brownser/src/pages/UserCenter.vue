@@ -36,7 +36,7 @@
 import { toRefs, watch } from 'vue';
 // import '@/styles/loginAndSignup.css'
 import { useRouter } from 'vue-router';
-import { userMessage } from '@/store/userMessage';
+import { userMessage } from '@/store/userStore';
 import { storeToRefs } from 'pinia';
 import { toastStore } from '@/store/toastStore';
 

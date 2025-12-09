@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { userMessage } from '@/store/userMessage';
+import { userMessage } from '@/store/userStore';
 
 </script>
 

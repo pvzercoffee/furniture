@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/message")
@@ -36,5 +37,12 @@ public class MessageController {
     public Result delete(@PathVariable Integer messageId){
         messageService.delete(messageId);
         return Result.success("已删除");
+    }
+
+    //查询留言可选项目
+    @GetMapping("/queryItem")
+    public Result queryItem(){
+        List<Map<Integer,String>> result = messageService.queryItem();
+        return Result.success(result);
     }
 }

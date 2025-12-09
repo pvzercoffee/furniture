@@ -1,10 +1,12 @@
 package com.pvzer.furniture.mapper;
 
 import com.pvzer.furniture.pojo.Message;
+import com.pvzer.furniture.pojo.MessageItem;
 import com.pvzer.furniture.pojo.MessageQueryInfo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MessageMapper {
@@ -31,4 +33,8 @@ public interface MessageMapper {
     //删除留言多表关系
     @Delete("delete from message_items_link where message_id = #{messageId}")
     void deleteLink(Integer messageId);
+
+    //查询可用留言项目
+    @Select("select id,name from items order by id")
+    List<Map<Integer,String>> queryItem();
 }

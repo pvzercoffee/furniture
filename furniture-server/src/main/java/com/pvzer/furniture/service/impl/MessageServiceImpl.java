@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -75,6 +76,7 @@ public class MessageServiceImpl implements MessageService {
         return messageInfoList;
     }
 
+    //删除留言
     @Override
     @Transactional
     public void delete(Integer id) {
@@ -83,4 +85,9 @@ public class MessageServiceImpl implements MessageService {
         messageMapper.delete(id);
     }
 
+    //查询可用项目
+    @Override
+    public List<Map<Integer,String>> queryItem() {
+        return messageMapper.queryItem();
+    }
 }

@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { userMessage } from '@/store/userMessage';
+import { userMessage } from '@/store/userStore';
 import {RouterLink} from 'vue-router'
 
 </script>

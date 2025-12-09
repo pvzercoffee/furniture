@@ -8,7 +8,7 @@
           <div class="board-card">
               <div class="card-left">
                 <ul class="serve-list">
-                      <li v-for="category in categoryList" :key="category.value"><button class="item-btn">{{ category.item }}</button></li>
+                      <li v-for="category in messageStore().itemList" :key="category.id"><button class="item-btn">{{ category.name }}</button></li>
                   </ul>
                   <div class="left-img"></div>
               </div>
@@ -28,9 +28,8 @@
                         <input type="checkbox" v-model="isSelectAll">全选
                       </span>
 
-                      <span class="font-text" v-for="category in categoryList" :key="category.item">
-
-                        <input type="checkbox" v-model="category.status">{{ category.item }}
+                      <span class="font-text" v-for="category in messageStore().itemList" :key="category.id">
+                        <input type="checkbox" v-model="category.status">{{ category.name }}
                       </span>
 
                       <h4 class="font-text"style="margin-top: 60px;">咨询内容<span class="redstar">*</span></h4>
@@ -49,51 +48,19 @@
 
 import Carousel from '@/components/Carousel.vue';
 import { HintColors } from '@/constants/HintColors';
+import { messageStore } from '@/store/messageStore';
 import { toastStore } from '@/store/toastStore';
-import { userMessage } from '@/store/userMessage';
+import { userMessage } from '@/store/userStore';
 import '@/styles/board.css'
 import { storeToRefs } from 'pinia';
 import { computed, reactive, ref, watch } from 'vue';
 
-//产品展示的数据
-const categoryList = reactive([
-{
-  item: '床上用品',
-  value: 'bedding',
-  status: false
-},
-{
-  item: '家居饰品',
-  value: 'decorations',
-  status: false
-},
-{
-  item: '居家日用',
-  value: 'daily',
-  status: false
-},
-{
-  item: '家居收纳',
-  value: 'storage',
-  status: false
-},
-{
-  item: '厨房收纳',
-  value: 'kitchenStorage',
-  status: false
-},
-{
-  item: '厨房餐饮',
-  value: 'catering',
-  status: false
-}
-]);
 
 //watch监测全选按钮，实现全反选
 const isSelectAll = ref(false);
 
 watch(isSelectAll,()=>{
-categoryList.forEach((value,index)=>{
+messageStore().itemList.forEach((value,index)=>{
   value.status = isSelectAll.value;
 });
 })

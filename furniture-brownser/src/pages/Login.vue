@@ -43,7 +43,7 @@ import { HintColors } from '@/constants/HintColors';
 import { ref, toRef, watch } from 'vue';
 import '@/styles/loginAndSignup.css'
 import { useRouter } from 'vue-router';
-import { userMessage } from '@/store/userMessage';
+import { userMessage } from '@/store/userStore';
 import { toastStore } from '@/store/toastStore';
 import { storeToRefs } from 'pinia';
 
