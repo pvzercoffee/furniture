@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { userMessage } from '@/store/userMessage';
+
+</script>
+
 <template>
     <footer>
         <div class="links">
@@ -20,10 +25,6 @@
         <li><RouterLink replace :to="{name:'board'}" class="nav-link">在线留言</RouterLink></li>
         <li><RouterLink replace :to="{name:'login'}" class="nav-link">登录注册</RouterLink></li> -->
 
-
-
-
-
                 <h3>快速链接</h3>
                 <div id="footer-link-quickly-top" class="footer-link-quickly">
                   <RouterLink replace :to="{name:'home'}" class="footer-link" >&gt;网站首页</RouterLink>
@@ -34,7 +35,8 @@
                   <RouterLink replace :to="{name:'board'}" class="footer-link">&gt;在线留言</RouterLink>
                 </div>
                 <div id="footer-link-quickly-bottom" class="footer-link-quickly">
-                  <RouterLink replace :to="{name:'login'}"  class="footer-link">&gt;登录注册</RouterLink>
+                  <RouterLink v-show="!userMessage().isLogin" replace :to="{name:'login'}"  class="footer-link">&gt;登录注册</RouterLink>
+                  <RouterLink v-show="userMessage().isLogin" replace :to="{name:'login'}"  class="footer-link">&gt;个人中心</RouterLink>
                   <RouterLink replace :to="{name:'/'}" class="footer-link"></RouterLink>
                 </div>
             </div>

@@ -89,7 +89,7 @@ const userInfo  = reactive<SignupInfo>({
   email:'',
   name:'',
   telephone:'',
-  gender:'male',
+  gender:2,
   birthday:''
 })
 

@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
         loginInfo.setGender(result.getGender());
         loginInfo.setTelephone(result.getTelephone());
         loginInfo.setUsername(result.getUsername());
+        loginInfo.setBirthday(result.getBirthday());
 
         //把id和username作为令牌载荷
         Map<String,Object> claims = new HashMap<>();

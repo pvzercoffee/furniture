@@ -40,11 +40,12 @@
 
 import Carousel from '@/components/Carousel.vue';
 import { HintColors } from '@/constants/HintColors';
-import { ref } from 'vue';
+import { ref, toRef, watch } from 'vue';
 import '@/styles/loginAndSignup.css'
 import { useRouter } from 'vue-router';
 import { userMessage } from '@/store/userMessage';
 import { toastStore } from '@/store/toastStore';
+import { storeToRefs } from 'pinia';
 
 const InputLimit = {
   nameMaxLength : 16,
@@ -62,11 +63,14 @@ let hintColor = ref(HintColors.normal)
 const useToastStore = toastStore();
 
 const userStore = userMessage();
+const userData = storeToRefs(userStore);
 
+//登录函数
 async function login(){
   if(!inputVerify()) return;
 
   try{
+    //把用户名密码传给store去提交
     await userStore.login(username.value,password.value);
     const {username:user} = userStore.userInfo;
     useToastStore.show("登录成功！欢迎回来，"+user);
@@ -78,6 +82,7 @@ async function login(){
 
 }
 
+//输入验证函数
 function inputVerify():boolean{
 
   const nameLength = username.value.length;
@@ -100,11 +105,27 @@ function inputVerify():boolean{
   return isVerify;
 }
 const router = useRouter();
+
+//注册按钮跳转到注册页
 function signup(){
   router.replace({
     name:'signup'
   });
 }
+
+//监听登录状态，若已登录则跳到个人中心
+watch(userData.isLogin,()=>{
+  if(userData.isLogin.value){
+    router.replace({
+      name:'user'
+    });
+  }
+},
+{
+  //首次加载也要判断
+  immediate:true
+}
+);
 
 </script>
 

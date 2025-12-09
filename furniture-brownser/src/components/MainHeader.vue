@@ -16,22 +16,21 @@
 
 <script lang="ts" setup>
 import { userMessage } from '@/store/userMessage';
+import { logined } from '@/utils/logined';
 import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
 let title = ref('欢迎来到精美家具');
-const loginInfo = storeToRefs(userMessage())
-const isLogin = ref(loginInfo.isLogin);
 
-watch(isLogin,()=>{
-  if(isLogin){
-    title.value = loginInfo.userInfo.value.name + '，欢迎来到精美家居';
+
+logined((loginInfo:any)=>{
+  if(loginInfo.isLogin){
+    const {name,gender} = loginInfo.userInfo;
+    title.value = name + (gender == 1 ? '先生' : '女士') + '，欢迎来到精美家居';
   }
   else{
     title.value = '欢迎来到精美家居';
   }
-
 });
-
 
 
 </script>

@@ -7,15 +7,16 @@
         <li><RouterLink replace :to="{name:'show'}" class="nav-link">产品展示</RouterLink></li>
         <li><RouterLink replace :to="{name:'about'}" class="nav-link">关于我们</RouterLink></li>
         <li><RouterLink replace :to="{name:'board'}" class="nav-link">在线留言</RouterLink></li>
-        <li><RouterLink replace :to="{name:'login'}" class="nav-link">登录注册</RouterLink></li>
+        <li  v-show="!userMessage().isLogin"><RouterLink replace :to="{name:'login'}" class="nav-link">登录注册</RouterLink></li>
+        <li v-show="userMessage().isLogin" ><RouterLink replace :to="{name:'user'}" class="nav-link">个人中心</RouterLink></li>
 
     </ul>
 </nav>
 </template>
 
 <script lang="ts" setup>
+import { userMessage } from '@/store/userMessage';
 import {RouterLink} from 'vue-router'
-
 
 </script>
 
