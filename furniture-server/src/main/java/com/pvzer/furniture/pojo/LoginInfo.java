@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginInfo {
-    private Integer id;
     private String username;
     private String email;
     private String name;

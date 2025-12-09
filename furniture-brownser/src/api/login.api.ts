@@ -8,7 +8,10 @@ export async function login(username:string,password:string):Promise<ResultInfo>
   })
 
   if(result.status != 200) throw new Error('出现异常！错误码：'+result.status);
+  if(result.data.code != 1) throw new Error(result.data.msg);
 
-  console.log(result.data);
+  if(result.data.data == null) throw new Error("用户名或密码输入错误");
+
+
   return result.data;
 }

@@ -13,4 +13,7 @@ public interface UserMapper {
 
     @Select("select * from users where username = #{username}")
     public User login(User user);
+
+    @Select("select username,email,name,telephone,birthday,gender from users where id = #{id} and username = #{username}")
+    public LoginInfo me(Integer id,String username);
 }

@@ -1,23 +1,32 @@
 import { login } from "@/api/login.api";
 import { signup } from "@/api/signup.api.";
 import type { ResultInfo } from "@/interface/ResultInfo";
-import type { LoginResponse,SignupInfo } from "@/interface/User";
+import type { LoginInfo, LoginResponse,SignupInfo } from "@/interface/User";
 import { defineStore } from "pinia";
 import { toastStore } from "./toastStore";
+import { me } from "@/api/me.api";
 
 
 export const userMessage = defineStore('userMessage',{
   actions:{
     //登录业务逻辑
-    async login(username:string,password:string){
-      const result:ResultInfo = await login(username,password);
+    async loginAction(username:string,password:string){
 
-      const data:LoginResponse = result.data as LoginResponse;
+      try{
+        const result:ResultInfo = await login(username,password);
+        const data:LoginResponse = result.data as LoginResponse;
 
-      if(data == null) throw new Error("用户名或密码错误");
+        this.userInfo = data;
+        this.isLogin = true;
 
-      this.userInfo = data;
-      this.isLogin = true;
+        localStorage.setItem("token",this.userInfo.token as string);
+
+      }catch(e){
+        if(e instanceof Error){
+          toastStore().show(e.message);
+          throw e;
+        }
+      }
     },
 
     //注册业务逻辑
@@ -41,6 +50,18 @@ export const userMessage = defineStore('userMessage',{
         token:''
       }
       this.isLogin = false;
+      localStorage.removeItem("token");
+    },
+
+    //查询用户信息业务逻辑
+    async selectInfo(){
+      const token = localStorage.getItem("token");
+      if(token == null) return;
+      if(token == '' || token == ' ') return;
+      if(token.length < 10) return;
+
+      this.userInfo = await me(token);
+      this.isLogin = true;
     }
   },
 

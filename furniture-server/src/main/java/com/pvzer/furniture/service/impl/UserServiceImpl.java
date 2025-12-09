@@ -2,12 +2,15 @@ package com.pvzer.furniture.service.impl;
 
 
 import com.pvzer.furniture.config.SecurityConfig;
+import com.pvzer.furniture.exception.JwtParseException;
 import com.pvzer.furniture.exception.SelectErrorException;
 import com.pvzer.furniture.mapper.UserMapper;
 import com.pvzer.furniture.pojo.LoginInfo;
 import com.pvzer.furniture.pojo.User;
 import com.pvzer.furniture.service.UserService;
 import com.pvzer.furniture.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +53,6 @@ public class UserServiceImpl implements UserService {
         //密码正确的情况下封装LoginInfo
         LoginInfo loginInfo = new LoginInfo();
 
-        loginInfo.setId(result.getId());
         loginInfo.setEmail(result.getEmail());
         loginInfo.setName(result.getName());
         loginInfo.setGender(result.getGender());
@@ -60,12 +62,24 @@ public class UserServiceImpl implements UserService {
 
         //把id和username作为令牌载荷
         Map<String,Object> claims = new HashMap<>();
-        claims.put("id",loginInfo.getId());
+        claims.put("id",result.getId());
         claims.put("username",loginInfo.getUsername());
 
         //创建令牌并传给LoginInfo
         loginInfo.setToken(JwtUtils.generateToken(claims));
         //登陆成功会返回信息和和令牌，不成功则是一个null
         return loginInfo;
+    }
+
+    @Override
+    public LoginInfo me(String token) {
+
+        //根据token返回用户信息
+        Claims claims = JwtUtils.parseToken(token);
+        Integer id = (Integer) claims.get("id");
+        String username = (String) claims.get("username");
+
+        return userMapper.me(id,username);
+
     }
 }

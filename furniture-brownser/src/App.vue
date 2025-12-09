@@ -1,13 +1,3 @@
-<script setup lang="ts">
-import MainHeader from './components/MainHeader.vue';
-import Toast from './components/Toast.vue'
-import MainNav from './components/MainNav.vue';
-import MainFooter from './components/MainFooter.vue';
-import {RouterView} from 'vue-router'
-
-
-</script>
-
 <template>
 
   <MainHeader />
@@ -20,6 +10,22 @@ import {RouterView} from 'vue-router'
   </div>
   <MainFooter />
 </template>
+
+<script setup lang="ts">
+
+import MainHeader from './components/MainHeader.vue';
+import Toast from './components/Toast.vue'
+import MainNav from './components/MainNav.vue';
+import MainFooter from './components/MainFooter.vue';
+import {RouterView} from 'vue-router'
+import {onMounted} from 'vue'
+import { userMessage } from './store/userMessage';
+
+onMounted(()=>{
+  userMessage().selectInfo();
+});
+
+</script>
 
 <style scoped>
 @import url('@/styles/global.css');

@@ -69,16 +69,10 @@ const userData = storeToRefs(userStore);
 async function login(){
   if(!inputVerify()) return;
 
-  try{
-    //把用户名密码传给store去提交
-    await userStore.login(username.value,password.value);
-    const {username:user} = userStore.userInfo;
-    useToastStore.show("登录成功！欢迎回来，"+user);
-
-  }catch(error){
-    if(error instanceof Error) useToastStore.show(error.message);
-
-  }
+  //把用户名密码传给store去提交
+  await userStore.loginAction(username.value,password.value);
+  const {username:user} = userStore.userInfo;
+  useToastStore.show("登录成功！欢迎回来，"+user);
 
 }
 

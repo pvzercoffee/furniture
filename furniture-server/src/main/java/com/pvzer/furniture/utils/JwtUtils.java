@@ -1,6 +1,8 @@
 package com.pvzer.furniture.utils;
 
+import com.pvzer.furniture.exception.JwtParseException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -28,9 +30,13 @@ public class JwtUtils {
 
     public static Claims parseToken(String token)
     {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
+        try{
+            return Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+        }catch (JwtException e){
+            throw new JwtParseException();
+        }
     }
 }
