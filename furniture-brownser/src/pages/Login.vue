@@ -61,14 +61,14 @@ let hint = ref('');
 let hintColor = ref(HintColors.normal)
 const useToastStore = toastStore();
 
-const loginInfo = userMessage();
+const userStore = userMessage();
 
 async function login(){
   if(!inputVerify()) return;
 
   try{
-    await loginInfo.login(username.value,password.value);
-    const {username:user} = loginInfo.userMessage;
+    await userStore.login(username.value,password.value);
+    const {username:user} = userStore.userInfo;
     useToastStore.show("登录成功！欢迎回来，"+user);
 
   }catch(error){

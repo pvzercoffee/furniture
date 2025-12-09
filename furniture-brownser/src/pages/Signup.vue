@@ -44,8 +44,8 @@
 
                 <div class="column">
                   <p class="font-text">性别</p>
-                  <input type="radio" name="gender" v-model="userInfo.gender" value="male"/>男
-                  <input type="radio" name="gender" v-model="userInfo.gender" value="female"/>女
+                  <input type="radio" name="gender" v-model="userInfo.gender" value="1"/>男
+                  <input type="radio" name="gender" v-model="userInfo.gender" value="0"/>女
                   <br />
                 </div>
 
@@ -79,9 +79,11 @@
 import Carousel from '@/components/Carousel.vue';
 import { reactive, ref } from 'vue';
 import '@/styles/loginAndSignup.css'
+import { userMessage } from '@/store/userMessage';
+import type { SignupInfo } from '@/interface/User';
 
 
-const userInfo = reactive({
+const userInfo  = reactive<SignupInfo>({
   username:'',
   password:'',
   email:'',
@@ -102,8 +104,10 @@ let infoHint = reactive({
 });
 
 
-function submitSignup(){
+async function submitSignup(){
   inputVerify();
+  await userMessage().signup(userInfo);
+
 }
 
 let mainForm = ref<HTMLFormElement | null>(null);

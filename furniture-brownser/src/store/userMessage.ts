@@ -1,8 +1,9 @@
 import { login } from "@/api/login.api";
-import type { LoginInfo } from "@/interface/LoginInfo";
+import { signup } from "@/api/signup.api.";
 import type { ResultInfo } from "@/interface/ResultInfo";
-import type { UserInfo } from "@/interface/UserInfo";
+import type { LoginResponse,SignupInfo } from "@/interface/User";
 import { defineStore } from "pinia";
+import { toastStore } from "./toastStore";
 
 
 export const userMessage = defineStore('userMessage',{
@@ -10,19 +11,24 @@ export const userMessage = defineStore('userMessage',{
     async login(username:string,password:string){
       const result:ResultInfo = await login(username,password);
 
-      const data:LoginInfo = result.data as LoginInfo;
+      const data:LoginResponse = result.data as LoginResponse;
 
       if(data == null) throw new Error("用户名或密码错误");
 
-      console.log(data);
-      this.userMessage = data;
+
+      this.userInfo = data;
+      console.log(this.userInfo);
       this.isLogin = true;
+    },
+    async signup(signupInfo:SignupInfo){
+      const result:ResultInfo = await signup(signupInfo);
+      toastStore().show(result.msg);
     }
   },
 
   state(){
     return{
-      userMessage:<LoginInfo>{
+      userInfo:<LoginResponse>{
         id:0,
         username:'',
         password:'',
@@ -31,6 +37,7 @@ export const userMessage = defineStore('userMessage',{
         telephone:'',
         gender:'',
         birthday:'',
+        token:''
 
       },
       isLogin:false

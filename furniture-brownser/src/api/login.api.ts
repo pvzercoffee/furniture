@@ -7,5 +7,6 @@ export async function login(username:string,password:string):Promise<ResultInfo>
     password:password
   })
 
+  if(result.status != 200) throw new Error('出现异常！错误码：'+result.status);
   return result.data;
 }

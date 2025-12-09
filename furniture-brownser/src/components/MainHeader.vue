@@ -24,7 +24,7 @@ const isLogin = ref(loginInfo.isLogin);
 
 watch(isLogin,()=>{
   if(isLogin){
-    title.value = loginInfo.userMessage.value.name + '，欢迎来到精美家居';
+    title.value = loginInfo.userInfo.value.name + '，欢迎来到精美家居';
   }
   else{
     title.value = '欢迎来到精美家居';

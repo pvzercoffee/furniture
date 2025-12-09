@@ -27,7 +27,8 @@ const {text,isShow} = storeToRefs(property);
   z-index: 9999;
   border-radius: 5px;
   left:50%;
-  top:200px;
+  top:40%;
+  border: 1px solid #666;
   transform: translate(-50%,-50%);
 }
 

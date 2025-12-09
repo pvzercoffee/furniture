@@ -1,5 +1,5 @@
 export interface ResultInfo{
   code:number,
-  msg:number,
+  msg:string,
   data:Object
 }
