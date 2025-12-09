@@ -14,7 +14,7 @@ create table messages(
     email varchar(100)  comment '咨询人邮箱',
     foreign key (user_id) references users(id)
 );
-
+alter table messages add text varchar(2000) not null comment '正文';
 create table message_items_link(
     message_id int not null comment '外键关联留言主键',
     item_id int not null comment '外键关联项目主键',

@@ -10,7 +10,7 @@ public class GolbalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result handlerException(Exception e){
 
-        System.out.println("来自拦截器的输出："+e.getMessage());
+        System.out.println("来自全局异常的输出："+e.getMessage());
 
         if(e.getMessage().contains("for key 'username'")) {
             return Result.error("这个用户名已经被使用了，换一个吧");

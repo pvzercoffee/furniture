@@ -32,6 +32,16 @@ public class Result {
         return result;
     }
 
+    public static Result success(String msg,Object data){
+
+        Result result = new Result();
+        result.code = 1;
+        result.msg = msg;
+
+
+        return result;
+    }
+
     public static Result error(String msg){
 
         Result result = new Result();
