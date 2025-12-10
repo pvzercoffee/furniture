@@ -15,6 +15,8 @@ create table messages(
     foreign key (user_id) references users(id)
 );
 alter table messages add text varchar(2000) not null comment '正文';
+alter table messages add create_time datetime not null default now() comment '评论发表时间'
+
 create table message_items_link(
     message_id int not null comment '外键关联留言主键',
     item_id int not null comment '外键关联项目主键',

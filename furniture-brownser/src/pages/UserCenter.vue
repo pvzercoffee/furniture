@@ -36,16 +36,16 @@
 import { toRefs, watch } from 'vue';
 // import '@/styles/loginAndSignup.css'
 import { useRouter } from 'vue-router';
-import { userMessage } from '@/store/userStore';
+import { userStore } from '@/store/userStore';
 import { storeToRefs } from 'pinia';
 import { toastStore } from '@/store/toastStore';
 
-const userStore = userMessage();
-const userData = storeToRefs(userStore);
+const user = userStore();
+const userData = storeToRefs(user);
 
 //退出登录
 function exit(){
-  userStore.exit();
+  user.exit();
   toastStore().show('已退出登录');
 }
 

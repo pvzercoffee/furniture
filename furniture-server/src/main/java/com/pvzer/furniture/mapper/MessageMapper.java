@@ -19,8 +19,8 @@ public interface MessageMapper {
     //维护一留言对多item的表
     void addToMessageItemsLink(Integer messageId,List<Integer> itemList);
 
-    //查询留言内容
-    @Select("select id,user_id,name,telephone,email,text from messages")
+    //查询留言内容,最新日期在上
+    @Select("select id,user_id,name,telephone,email,text,create_time from messages order by create_time desc ")
     List<Message> query();
 
     //查询单条留言的item名

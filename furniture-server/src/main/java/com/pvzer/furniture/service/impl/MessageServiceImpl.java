@@ -25,6 +25,7 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     MessageMapper messageMapper;
 
+    //添加留言
     @Transactional
     @Override
     public void add(Message message) {
@@ -37,6 +38,7 @@ public class MessageServiceImpl implements MessageService {
         messageMapper.addToMessageItemsLink(messageId,message.getItemList());
     }
 
+    //查询留言
     @Override
     public List<MessageInfo> query(Integer page, Integer pageSize) {
 
@@ -50,7 +52,6 @@ public class MessageServiceImpl implements MessageService {
         //通过每个留言的id去遍历n个留言的m个项目,获取留言的item
         for(Message msg : messageList){
 
-
             //Message本身具备的属性直接填充
             MessageInfo messageInfo = new MessageInfo();
 
@@ -59,6 +60,7 @@ public class MessageServiceImpl implements MessageService {
             messageInfo.setTelephone(msg.getTelephone());
             messageInfo.setName(msg.getName());
             messageInfo.setEmail(msg.getEmail());
+            messageInfo.setCreateTime(msg.getCreateTime());
 
             //Message没有的属性通过子查询连接涉及的表
             List<MessageQueryInfo> queryInfoList = messageMapper.queryItems(msg.getId());

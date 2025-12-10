@@ -7,7 +7,7 @@ import { toastStore } from "./toastStore";
 import { me } from "@/api/me.api";
 
 
-export const userMessage = defineStore('userMessage',{
+export const userStore = defineStore('userStore',{
   actions:{
     //登录业务逻辑
     async loginAction(username:string,password:string){
@@ -81,6 +81,7 @@ export const userMessage = defineStore('userMessage',{
       },
       isLogin:false
     }
-  }
+  },
+
 
 });

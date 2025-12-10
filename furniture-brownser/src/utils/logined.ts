@@ -1,11 +1,11 @@
 import { storeToRefs } from "pinia";
 import { watch } from "vue";
-import { userMessage } from "@/store/userStore";
+import { userStore } from "@/store/userStore";
 
 export function logined(fn:any){
-  const loginInfo = storeToRefs(userMessage())
+  const loginInfo = storeToRefs(userStore())
 
   watch(loginInfo.userInfo,()=>{
-    fn(userMessage());
+    fn(userStore());
   });
 }

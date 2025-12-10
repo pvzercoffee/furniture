@@ -43,7 +43,7 @@ import { HintColors } from '@/constants/HintColors';
 import { ref, toRef, watch } from 'vue';
 import '@/styles/loginAndSignup.css'
 import { useRouter } from 'vue-router';
-import { userMessage } from '@/store/userStore';
+import { userStore } from '@/store/userStore';
 import { toastStore } from '@/store/toastStore';
 import { storeToRefs } from 'pinia';
 
@@ -62,17 +62,17 @@ let hint = ref('');
 let hintColor = ref(HintColors.normal)
 const useToastStore = toastStore();
 
-const userStore = userMessage();
-const userData = storeToRefs(userStore);
+const user = userStore();
+const userData = storeToRefs(user);
 
 //登录函数
 async function login(){
   if(!inputVerify()) return;
 
   //把用户名密码传给store去提交
-  await userStore.loginAction(username.value,password.value);
-  const {username:user} = userStore.userInfo;
-  useToastStore.show("登录成功！欢迎回来，"+user);
+  await user.loginAction(username.value,password.value);
+  const {username:name} = user.userInfo;
+  useToastStore.show("登录成功！欢迎回来，"+name);
 
 }
 

@@ -1,9 +1,10 @@
 import { addMessage } from "@/api/addMessage.api";
 import { queryItem } from "@/api/queryItem.api";
-import type { ItemResponse } from "@/interface/ItemResponse";
-import type { MessageInfo } from "@/interface/Message";
+import type { ItemResponse } from "@/interface/Message";
+import type { MessageInfo, MessageResponse } from "@/interface/Message";
 import { defineStore } from "pinia";
 import { toastStore } from "./toastStore";
+import { queryMessage } from "@/api/queryMessage.api";
 
 export const messageStore = defineStore('useMessageStore',{
 
@@ -24,12 +25,26 @@ export const messageStore = defineStore('useMessageStore',{
           return;
         }
       }
-    }
+    },
+
+    //查询留言
+    async queryMessageAction(page:number):Promise<MessageResponse[]>{
+      try{
+        const res = await queryMessage(page);
+        this.messageList = Array.isArray(res) ? res : [];
+        return this.messageList;
+      }catch(e){
+        if(e instanceof Error) toastStore().show("错误类型："+e.message)
+        return [];
+      }
+
+    },
   },
 
   state(){
     return{
-      itemList:<ItemResponse[]>[]
+      itemList:<ItemResponse[]>[],
+      messageList:<MessageResponse[]>[]
     }
   }
 });

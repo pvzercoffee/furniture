@@ -41,22 +41,24 @@
 
               </div>
           </div>
+          <!-- 留言展示 -->
+          <ShowMessage />
       </div>
     </div>
 </template>
 <script setup lang="ts">
 
 import Carousel from '@/components/Carousel.vue';
-import Toast from '@/components/Toast.vue';
+import ShowMessage from '@/components/ShowMessage.vue';
 import { HintColors } from '@/constants/HintColors';
 import { messageStore } from '@/store/messageStore';
 import { toastStore } from '@/store/toastStore';
-import { userMessage } from '@/store/userStore';
+import { userStore } from '@/store/userStore';
 import '@/styles/board.css'
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 
 //提交给后端的信息
-const submitInfo = reactive({
+let submitInfo = reactive({
     name:'',
     telephone:'',
     email:'',
@@ -107,7 +109,7 @@ let mainForm = ref<HTMLFormElement|null>(null);
 const verify = ()=>{
 
   const {itemList} = messageStore();
-  const {isLogin} = userMessage();
+  const {isLogin} = userStore();
 
   if(!isLogin){
     toast.show("登录后才能留言");
@@ -145,10 +147,20 @@ const submit = ()=>{
 
   messageStore().addMessageAction(submitInfo);
   toast.show("留言发表成功");
+
+  //发表后清除表单
+  submitInfo.email = submitInfo.name = submitInfo.telephone = submitInfo.text = '';
+  submitInfo.itemList = [];
+
 }
 
 //加载板块
 onMounted(()=>{
-  messageStore().queryItemAction();
+  watch(()=>userStore().userInfo.token,(token)=>{
+    if(token){
+      messageStore().queryItemAction();
+    }
+  })
+
 });
 </script>

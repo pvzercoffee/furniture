@@ -1,12 +1,12 @@
 import type { MessageInfo } from "@/interface/Message";
-import { userMessage } from "@/store/userStore";
+import { userStore } from "@/store/userStore";
 import axios from "axios";
 
 export const addMessage = async (message:MessageInfo)=>{
-  console.log(userMessage().userInfo.token);
+  console.log(userStore().userInfo.token);
   const result = await axios.post('/api/message',message,{
     headers:{
-      token:userMessage().userInfo.token
+      token:userStore().userInfo.token
     }
   });
 

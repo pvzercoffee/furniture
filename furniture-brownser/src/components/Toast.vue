@@ -7,14 +7,12 @@
 <script setup lang="ts">
 import { toastStore } from '@/store/toastStore';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+
 
 
 let property = toastStore();
 
 const {text,isShow} = storeToRefs(property);
-
-
 
 </script>
 

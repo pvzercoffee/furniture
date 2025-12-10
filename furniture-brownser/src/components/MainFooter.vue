@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { userMessage } from '@/store/userStore';
+import { userStore } from '@/store/userStore';
 
 </script>
 
@@ -35,8 +35,8 @@ import { userMessage } from '@/store/userStore';
                   <RouterLink replace :to="{name:'board'}" class="footer-link">&gt;在线留言</RouterLink>
                 </div>
                 <div id="footer-link-quickly-bottom" class="footer-link-quickly">
-                  <RouterLink v-show="!userMessage().isLogin" replace :to="{name:'login'}"  class="footer-link">&gt;登录注册</RouterLink>
-                  <RouterLink v-show="userMessage().isLogin" replace :to="{name:'login'}"  class="footer-link">&gt;个人中心</RouterLink>
+                  <RouterLink v-show="!userStore().isLogin" replace :to="{name:'login'}"  class="footer-link">&gt;登录注册</RouterLink>
+                  <RouterLink v-show="userStore().isLogin" replace :to="{name:'login'}"  class="footer-link">&gt;个人中心</RouterLink>
                   <RouterLink replace :to="{name:'/'}" class="footer-link"></RouterLink>
                 </div>
             </div>

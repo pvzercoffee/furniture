@@ -79,7 +79,7 @@
 import Carousel from '@/components/Carousel.vue';
 import { reactive, ref } from 'vue';
 import '@/styles/loginAndSignup.css'
-import { userMessage } from '@/store/userStore';
+import { userStore } from '@/store/userStore';
 import type { SignupInfo } from '@/interface/User';
 
 
@@ -106,7 +106,7 @@ let infoHint = reactive({
 
 async function submitSignup(){
   if(!inputVerify()) return;
-  await userMessage().signup(userInfo);
+  await userStore().signup(userInfo);
 
 }
 

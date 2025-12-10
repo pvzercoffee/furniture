@@ -19,10 +19,10 @@ import MainNav from './components/MainNav.vue';
 import MainFooter from './components/MainFooter.vue';
 import {RouterView} from 'vue-router'
 import {onMounted} from 'vue'
-import { userMessage } from './store/userStore';
+import { userStore } from './store/userStore';
 
 onMounted(()=>{
-  userMessage().selectInfo();
+  userStore().selectInfo();
 });
 
 </script>
