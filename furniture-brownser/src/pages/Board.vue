@@ -147,6 +147,8 @@ const submit = ()=>{
 
   messageStore().addMessageAction(submitInfo);
   toast.show("留言发表成功");
+  //加载留言列表
+  messageStore().queryMessageAction(1)
 
   //发表后清除表单
   submitInfo.email = submitInfo.name = submitInfo.telephone = submitInfo.text = '';
