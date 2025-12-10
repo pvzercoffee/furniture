@@ -28,23 +28,44 @@ export const messageStore = defineStore('useMessageStore',{
     },
 
     //查询留言
-    async queryMessageAction(page:number):Promise<MessageResponse[]>{
+    async queryMessageAction(page:number){
       try{
         const res = await queryMessage(page);
-        this.messageList = Array.isArray(res) ? res : [];
+        const result:MessageResponse[] = res.messages;
+        const mSet = new Set<number>();
+
+        this.messageList.push(...res.messages)
+        this.messageTotal = res.total;
+
+
+        this.messageList.forEach((element,index) => {
+
+          if(mSet.has(element.id)){
+            console.log('发生重复'+index);
+
+            if(this.messageList[index-1]?.itemList){
+              this.messageList[index]?.itemList.push(...this.messageList?.[index-1]?.itemList ?? []);
+            }
+            this.messageList.splice(index-1,1);
+
+          }
+          mSet.add(element.id)
+
+        });
+
         return this.messageList;
       }catch(e){
         if(e instanceof Error && e.message) toastStore().show('登录后才能留言'+e.message)
         return [];
       }
-
     },
   },
 
   state(){
     return{
       itemList:<ItemResponse[]>[],
-      messageList:<MessageResponse[]>[]
+      messageList:<MessageResponse[]>[],
+      messageTotal:0
     }
   }
 });

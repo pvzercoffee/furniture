@@ -18,6 +18,5 @@ public class MessageInfo {
     private String email;
     private String text;
     private LocalDateTime createTime;
-    private Integer total;
     private List<String> itemList;
 }

@@ -5,33 +5,42 @@
 <mapper namespace="com.pvzer.furniture.mapper.MessageMapper">
     <insert id="addToMessageItemsLink">
         insert into message_items_link(message_id, item_id) values
-            <foreach collection="itemList" item="item" separator=",">
-                (#{messageId},#{item})
-            </foreach>
+        <foreach collection="itemList" item="item" separator=",">
+            (#{messageId},#{item})
+        </foreach>
     </insert>
 
     <resultMap id="messageMap" type="com.pvzer.furniture.pojo.MessageInfo">
-        <id column="id" property="id"/>
-        <result column="username" property="username" />
-        <result column="name" property="name" />
-        <result column="telephone" property="telephone" />
-        <result column="email" property="email" />
-        <result column="text" property="text" />
-        <result column="create_time" property="createTime" />
-        <collection property="itemList" ofType="java.lang.String">
-            <id column="item" />
+
+        <id column="msgs_id" property="id"/>
+        <result column="users_username" property="username" />
+        <result column="msgs_name" property="name" />
+        <result column="msgs_telephone" property="telephone" />
+        <result column="msgs_email" property="email" />
+        <result column="msgs_text" property="text" />
+        <result column="msgs_create_time" property="createTime" />
+        <collection property="itemList" javaType="java.util.List" ofType="java.lang.String">
+            <result column="items_name" />
         </collection>
     </resultMap>
 
-<!--    根据留言id查出留言用户名和留言所有的item-->
-    <select id="query" resultMap="messageMap ">
-        select msgs.id,users.username as username,msgs.name,msgs.telephone,
-               msgs.email,msgs.text,msgs.create_time, items.name as item
+    <!--    根据留言id查出留言用户名和留言所有的item-->
+    <select id="query" resultMap="messageMap">
+        select
+               msgs.id as msgs_id,
+               users.username as users_username,
+               msgs.name as msgs_name,
+               msgs.telephone as mags_telephone,
+               msgs.email as msgs_email,
+               msgs.text as msgs_text,
+               msgs.create_time as msg_create_time,
+               items.name as items_name
         from message_items_link link
-        left join items on link.item_id = items.id
-        left join messages msgs on msgs.id = link.message_id
-        left join users on users.id = msgs.user_id
+                 left join items on link.item_id = items.id
+                 left join messages msgs on msgs.id = link.message_id
+                 left join users on users.id = msgs.user_id
         order by msgs.create_time desc
+
     </select>
 
 </mapper>

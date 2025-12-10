@@ -42,7 +42,6 @@ public class MessageServiceImpl implements MessageService {
     //查询留言
     @Override
     public Map<String,Object> query(Integer page, Integer pageSize) {
-
         PageHelper.startPage(page,pageSize);
 
         //查出留言列表

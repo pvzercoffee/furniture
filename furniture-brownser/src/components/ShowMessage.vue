@@ -1,7 +1,8 @@
 <template>
   <div class="showMessage">
-    <div class="container">
 
+    <div class="container">
+      <p class="title">共有{{ messages.messageTotal }} 留言</p>
       <div class="message" v-for="msg in messages.messageList" :key="msg.id">
         <div class="msg-header">
           <div class="msg-avatar"></div>
@@ -23,7 +24,7 @@
 
         </div>
       </div>
-
+      <button type="button" class="view-button" @click="showMoreMessage">{{ remainMessage >= 1 ? `查看剩余${remainMessage}条留言` : '留言全部加载完毕' }}</button>
 
       </div>
   </div>
@@ -34,20 +35,36 @@
 
 import { messageStore } from '@/store/messageStore';
 import { userStore } from '@/store/userStore';
-import { onMounted, reactive, watch } from 'vue';
+import { computed, onMounted, onUnmounted, reactive, watch } from 'vue';
 
 let page = 1;
+
+const remainMessage = computed(()=>{
+  return  messages.messageTotal- messages.messageList.length;
+});
+
+const showMoreMessage = ()=>{
+  if(remainMessage.value >= 1){
+    page++;
+    messageStore().queryMessageAction(page)
+  }
+}
 
 let messages = reactive(messageStore());
 watch(()=>userStore().userInfo.token,(token)=>{
     if(token){
       messageStore().queryMessageAction(page)
-      console.log("watch发起请求"+userStore().userInfo.token);
     }
-  })
+})
 
 onMounted(()=>{
   if(userStore().userInfo.token) messageStore().queryMessageAction(page);
+});
+
+//卸载组件时还原评论
+onUnmounted(()=>{
+  messages.messageTotal = 0;
+  messages.messageList = [];
 });
 </script>
 
@@ -58,6 +75,10 @@ onMounted(()=>{
   flex-direction: column;
   font-family: '微软雅黑';
   margin-top: 50px;
+}
+.title{
+  font-size: 30px;
+  margin: 40px 0 40px 40px;
 }
 .message{
   display: flex;
@@ -105,5 +126,16 @@ onMounted(()=>{
   font-size: 12px;
   border-radius: 50px;
   padding: 0 13px 0 13px;
+}
+.view-button{
+  width: 250px;
+  margin: auto;
+  height: 35px;
+  margin-top: 25px;
+  background-color: rgb(230, 213, 116);
+  border: 0;
+}
+.view-button:hover{
+  background-color: rgb(213, 197, 109);
 }
 </style>
