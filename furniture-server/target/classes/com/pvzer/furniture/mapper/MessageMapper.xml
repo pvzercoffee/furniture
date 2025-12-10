@@ -33,7 +33,7 @@
                msgs.telephone as mags_telephone,
                msgs.email as msgs_email,
                msgs.text as msgs_text,
-               msgs.create_time as msg_create_time,
+               msgs.create_time as msgs_create_time,
                items.name as items_name
         from message_items_link link
                  left join items on link.item_id = items.id

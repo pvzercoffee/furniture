@@ -1,8 +1,8 @@
 <template>
-  <div class="showMessage">
+  <div class="showMessage" v-show="userStore().isLogin">
 
     <div class="container">
-      <p class="title">共有{{ messages.messageTotal }} 留言</p>
+      <p class="title">共有{{ messages.messageTotal }} 条留言</p>
       <div class="message" v-for="msg in messages.messageList" :key="msg.id">
         <div class="msg-header">
           <div class="msg-avatar"></div>
@@ -78,7 +78,7 @@ onUnmounted(()=>{
 }
 .title{
   font-size: 30px;
-  margin: 40px 0 40px 40px;
+  margin: 40px 0 40px 20px;
 }
 .message{
   display: flex;

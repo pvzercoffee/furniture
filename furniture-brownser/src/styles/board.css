@@ -64,6 +64,7 @@ form>textarea{
 }
 #word_count{
   color:green;
+  width: auto;
 }
 @media (max-width: 768px) {
   .board-card {

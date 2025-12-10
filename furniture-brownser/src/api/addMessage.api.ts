@@ -3,7 +3,6 @@ import { userStore } from "@/store/userStore";
 import axios from "axios";
 
 export const addMessage = async (message:MessageInfo)=>{
-  console.log(userStore().userInfo.token);
   const result = await axios.post('/api/message',message,{
     headers:{
       token:userStore().userInfo.token

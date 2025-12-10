@@ -5,6 +5,7 @@ import type { MessageInfo, MessageResponse } from "@/interface/Message";
 import { defineStore } from "pinia";
 import { toastStore } from "./toastStore";
 import { queryMessage } from "@/api/queryMessage.api";
+import { getPassTime } from "@/utils/getPassTime";
 
 export const messageStore = defineStore('useMessageStore',{
 
@@ -31,27 +32,36 @@ export const messageStore = defineStore('useMessageStore',{
     async queryMessageAction(page:number){
       try{
         const res = await queryMessage(page);
-        const result:MessageResponse[] = res.messages;
         const mSet = new Set<number>();
 
         this.messageList.push(...res.messages)
         this.messageTotal = res.total;
 
+        //去除重复结果
 
-        this.messageList.forEach((element,index) => {
+        for(let index = 0;index < this.messageList.length;index++){
+
+          let element = this.messageList[index]!;
 
           if(mSet.has(element.id)){
-            console.log('发生重复'+index);
-
-            if(this.messageList[index-1]?.itemList){
-              this.messageList[index]?.itemList.push(...this.messageList?.[index-1]?.itemList ?? []);
+            if(this.messageList[index]?.itemList){
+              this.messageList[index-1]?.itemList.push(...this.messageList?.[index]?.itemList ?? []);
             }
             this.messageList.splice(index-1,1);
-
           }
-          mSet.add(element.id)
+          mSet.add(element.id);
 
+
+
+        }
+
+        //转换日期
+        this.messageList.forEach((element,index)=>{
+          if(this.messageList[index]?.createTime){
+            this.messageList[index]!.createTime = getPassTime(new Date(element.createTime)) || element.createTime
+          }
         });
+
 
         return this.messageList;
       }catch(e){

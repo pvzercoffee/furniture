@@ -2,7 +2,7 @@ import type { MessageResponse } from "@/interface/Message";
 import { userStore } from "@/store/userStore";
 import axios from "axios";
 
-const pageSize = 10;
+const pageSize = 15;
 
 export const queryMessage = async (page:number)=>{
   const result = await axios.get(`/api/message?&page=${page}&pageSize=${pageSize}`,{
