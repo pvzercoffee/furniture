@@ -15,10 +15,8 @@
 </template>
 
 <script lang="ts" setup>
-import { userMessage } from '@/store/userMessage';
 import { logined } from '@/utils/logined';
-import { storeToRefs } from 'pinia';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 let title = ref('欢迎来到精美家具');
 
 

@@ -34,7 +34,7 @@ export const messageStore = defineStore('useMessageStore',{
         this.messageList = Array.isArray(res) ? res : [];
         return this.messageList;
       }catch(e){
-        if(e instanceof Error) toastStore().show("错误类型："+e.message)
+        if(e instanceof Error && e.message) toastStore().show('登录后才能留言'+e.message)
         return [];
       }
 

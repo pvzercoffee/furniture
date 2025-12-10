@@ -9,6 +9,6 @@ import java.util.Map;
 public interface MessageService {
     void add(Message message);
     void delete(Integer id);
-    List<MessageInfo> query(Integer page, Integer pageSize);
+    Map<String,Object> query(Integer page, Integer pageSize);
     List<Map<Integer,String>> queryItem();
 }

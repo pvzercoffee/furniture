@@ -11,8 +11,9 @@ export const queryMessage = async (page:number):Promise<MessageResponse[]>=>{
     }
   });
 
+  console.log(result.data.code);
   if(result.status != 200) throw new Error("状态异常："+result.statusText);
-  if(result.data.code != 1) throw new Error("服务器返回错误："+result.data.msg);
+  if(result.data.code != 1) throw new Error("服务器返回错误："+result.data.data);
 
   return result.data.data;
 }

@@ -1,6 +1,7 @@
 package com.pvzer.furniture.mapper;
 
 import com.pvzer.furniture.pojo.Message;
+import com.pvzer.furniture.pojo.MessageInfo;
 import com.pvzer.furniture.pojo.MessageItem;
 import com.pvzer.furniture.pojo.MessageQueryInfo;
 import org.apache.ibatis.annotations.*;
@@ -20,11 +21,11 @@ public interface MessageMapper {
     void addToMessageItemsLink(Integer messageId,List<Integer> itemList);
 
     //查询留言内容,最新日期在上
-    @Select("select id,user_id,name,telephone,email,text,create_time from messages order by create_time desc ")
-    List<Message> query();
+    List<MessageInfo> query();
 
-    //查询单条留言的item名
-    List<MessageQueryInfo> queryItems(Integer messageId);
+    //查询留言条目数
+    @Select("select count(id) from messages")
+    Integer queryNum();
 
     //删除留言内容
     @Delete("delete from messages where id = #{messageId}")

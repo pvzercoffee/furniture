@@ -158,11 +158,7 @@ const submit = ()=>{
 
 //加载板块
 onMounted(()=>{
-  watch(()=>userStore().userInfo.token,(token)=>{
-    if(token){
-      messageStore().queryItemAction();
-    }
-  })
+    messageStore().queryItemAction();
 
 });
 </script>

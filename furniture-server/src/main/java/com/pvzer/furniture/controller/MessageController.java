@@ -28,7 +28,7 @@ public class MessageController {
     //查询留言
     @GetMapping
     public Result query(@RequestParam Integer page, @RequestParam Integer pageSize){
-        List<MessageInfo> messageInfoList =  messageService.query(page,pageSize);
+        Map<String,Object> messageInfoList =  messageService.query(page,pageSize);
         return Result.success(messageInfoList);
     }
 

@@ -2,7 +2,7 @@
   <div class="showMessage">
     <div class="container">
 
-      <div class="message" v-for="msg in messages.messageList.value" :key="msg.id">
+      <div class="message" v-for="msg in messages.messageList" :key="msg.id">
         <div class="msg-header">
           <div class="msg-avatar"></div>
           <p class="msg-username">{{ msg.username }}</p>
@@ -32,23 +32,22 @@
 
 <script setup lang="ts">
 
-import type { MessageResponse } from '@/interface/Message';
 import { messageStore } from '@/store/messageStore';
 import { userStore } from '@/store/userStore';
-import { storeToRefs } from 'pinia';
-import { onMounted, watch } from 'vue';
+import { onMounted, reactive, watch } from 'vue';
 
 let page = 1;
 
-let messages = storeToRefs(messageStore());
-
-onMounted(()=>{
-  watch(()=>userStore().userInfo.token,(token)=>{
+let messages = reactive(messageStore());
+watch(()=>userStore().userInfo.token,(token)=>{
     if(token){
       messageStore().queryMessageAction(page)
+      console.log("watch发起请求"+userStore().userInfo.token);
     }
   })
 
+onMounted(()=>{
+  if(userStore().userInfo.token) messageStore().queryMessageAction(page);
 });
 </script>
 
@@ -67,7 +66,6 @@ onMounted(()=>{
   flex-direction: column;
   padding: 20px 5% 20px 5%;
   margin: 0 20px 20px 20px;
-  margin-bottom: 40px;
 }
 
 .msg-header{

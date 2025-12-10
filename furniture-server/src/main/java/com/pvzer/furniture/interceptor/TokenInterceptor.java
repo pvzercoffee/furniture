@@ -16,7 +16,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         String token = request.getHeader("token");
-
+        System.out.println("用户令牌："+token);
         //验证令牌有效性
         try{
             Claims claims = JwtUtils.parseToken(token);
