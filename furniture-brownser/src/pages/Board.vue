@@ -17,11 +17,11 @@
                   <h3 class="text-big">您可以留下您宝贵的意见，我们会在第一时间回复您，谢谢关注！</h3>
                   <form ref="mainForm">
                       <h4 class="font-text">您的姓名<span class="redstar">*</span></h4>
-                      <input type="text" required autocomplete="name">
+                      <input type="text" v-model="submitInfo.name" required autocomplete="name">
                       <h4 class="font-text">您的电话<span class="redstar">*</span></h4>
-                      <input type="text" required autocomplete="tel">
+                      <input type="text"v-model="submitInfo.telephone" required autocomplete="tel">
                       <h4 class="font-text">您的邮箱<span class="redstar">*</span></h4>
-                      <input type="text" required autocomplete="email">
+                      <input type="text" v-model="submitInfo.email" required autocomplete="email">
                       <h4 class="font-text">咨询项目<span class="redstar">*</span></h4>
 
                       <span class="font-text">
@@ -34,7 +34,7 @@
 
                       <h4 class="font-text"style="margin-top: 60px;">咨询内容<span class="redstar">*</span></h4>
                       <p class="font-text" id="word_count" :style="{'color':hintColor}">{{ hint }}</p>
-                      <textarea id="msg_area" required v-model="msg"></textarea>
+                      <textarea id="msg_area" required v-model="submitInfo.text"></textarea>
                       <br>
                       <input type="button" value="提交" @click="submit">
                   </form>
@@ -47,14 +47,25 @@
 <script setup lang="ts">
 
 import Carousel from '@/components/Carousel.vue';
+import Toast from '@/components/Toast.vue';
 import { HintColors } from '@/constants/HintColors';
 import { messageStore } from '@/store/messageStore';
 import { toastStore } from '@/store/toastStore';
 import { userMessage } from '@/store/userStore';
 import '@/styles/board.css'
-import { storeToRefs } from 'pinia';
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 
+//提交给后端的信息
+const submitInfo = reactive({
+    name:'',
+    telephone:'',
+    email:'',
+    text:'',
+    itemList:<number[]>[]
+});
+
+//消息提示
+let toast = toastStore();
 
 //watch监测全选按钮，实现全反选
 const isSelectAll = ref(false);
@@ -69,11 +80,10 @@ messageStore().itemList.forEach((value,index)=>{
 const maxInput = 100;
 let hintColor = ref(HintColors.normal)
 
-let msg = ref('');
 let hint = ref(`你还能输入${maxInput}个字`);
 
 const words = computed(()=>{
-return maxInput - msg.value.length
+return maxInput - submitInfo.text.length;
 });
 
 //渲染字数情况给页面
@@ -90,22 +100,55 @@ hintColor.value = HintColors.legal
 
 });
 
-//提交留言
-let mainForm = ref<HTMLInputElement|null>(null);
 
+let mainForm = ref<HTMLFormElement|null>(null);
 
+//表单验证
+const verify = ()=>{
 
-function submit(){
+  const {itemList} = messageStore();
+  const {isLogin} = userMessage();
 
-  if(!userMessage().isLogin){
-    toastStore().show("登录后才能留言");
-    return;
+  if(!isLogin){
+    toast.show("登录后才能留言");
+    return false;
   }
-
   if(!mainForm.value?.reportValidity()){
-    toastStore().show("请填写完整信息");
-    return;
+    toast.show("请填写完整信息");
+    return false;
   }
+  if(words.value < 0){
+    toast.show("超过允许字数");
+    return false;
+  }
+  //arr.some(item=>bool)：当数组元素有一个满足bool表达式，则返回true
+  if(!itemList.some(item => item.status)){
+    toast.show("请至少选择一个咨询项目");
+    return false;
+  }
+
+  return true;
 }
 
+//提交留言
+const submit = ()=>{
+
+  if(!verify()) return;
+  const {itemList} = messageStore();
+
+  //arr.filter(item=>bool)：剔除所有不符合bool的元素
+  //arr.map(item=>bool)：返回一个属性组成的新arr
+
+  submitInfo.itemList = itemList
+    .filter(item => item.status)
+    .map(item=>item.id);
+
+  messageStore().addMessageAction(submitInfo);
+  toast.show("留言发表成功");
+}
+
+//加载板块
+onMounted(()=>{
+  messageStore().queryItemAction();
+});
 </script>

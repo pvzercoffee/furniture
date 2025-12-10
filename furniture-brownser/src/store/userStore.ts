@@ -53,7 +53,7 @@ export const userMessage = defineStore('userMessage',{
       localStorage.removeItem("token");
     },
 
-    //查询用户信息业务逻辑
+    //根据token查询用户信息业务逻辑
     async selectInfo(){
       const token = localStorage.getItem("token");
       if(token == null) return;
@@ -61,6 +61,7 @@ export const userMessage = defineStore('userMessage',{
       if(token.length < 10) return;
 
       this.userInfo = await me(token);
+      this.userInfo.token = token;
       this.isLogin = true;
     }
   },

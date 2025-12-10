@@ -6,6 +6,7 @@ import com.pvzer.furniture.pojo.Message;
 import com.pvzer.furniture.pojo.MessageInfo;
 import com.pvzer.furniture.pojo.MessageQueryInfo;
 import com.pvzer.furniture.service.MessageService;
+import com.pvzer.furniture.utils.CurrentHolder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,8 @@ public class MessageServiceImpl implements MessageService {
     @Transactional
     @Override
     public void add(Message message) {
+        //获取发表账号的id
+        message.setUserId(CurrentHolder.getCurrentId());
         //先把留言插入messages表并获取回显的主键
         messageMapper.addToMessages(message);
         Integer messageId = message.getId();
