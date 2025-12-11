@@ -7,5 +7,7 @@ export function logined(fn:any){
 
   watch(loginInfo.userInfo,()=>{
     fn(userStore());
+  },{
+    deep:true
   });
 }

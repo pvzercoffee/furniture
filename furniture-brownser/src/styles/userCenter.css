@@ -1,0 +1,102 @@
+.login-frame{
+  background-image: url('@/images/注册.jpg');
+
+}
+.base-button{
+  width: 90px;
+  height: 30px;
+  margin-top: 12px;
+  margin-left: auto;
+  border: 0;
+}
+.base-button:hover{
+  background-color: #ccc;
+}
+.head{
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(253, 235, 216);
+  width: 300px;
+  margin: auto;
+  padding: 50px 83px 20px 83px;
+  border-radius: 15px 15px 0 0;
+
+}
+.avatar{
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: auto;
+  background-image: url('@/images/canjv.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center;
+
+}
+.click-text{
+  width: 70%;
+  height: 35px;
+  color: #fff;
+  background-color: rgb(29, 141, 167);
+  border: 0;
+  margin-left: 50%;
+  transform: translate(-50%);
+
+}
+.click-text:hover{
+  background-color: rgb(25, 121, 142);
+}
+
+.avatar-text{
+  margin: auto;
+  margin-top: 15px;
+  font-size: 18px;
+
+}
+.info-list{
+  display: flex;
+  flex-wrap: wrap;
+}
+.base-info{
+  margin: auto;
+  background-color: #fff;
+  width: 416px;
+  line-height: 55px;
+  /* margin-top: 30px; */
+  padding: 25px;
+  border-radius: 0 0 15px 15px;
+
+}
+.base-info-item{
+  margin: auto;
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+.user-frame{
+  display: flex;
+  flex-direction:column;
+  margin: auto;
+  width: 100%;
+}
+.user{
+  display: flex;
+  flex-direction: column;
+  margin:30px;
+}
+.info-input{
+  border: 0;
+  font-size: 16px;
+  background: #ffffff00;
+}
+
+
+@media(max-width:768px){
+  .head{
+    max-width: 300px;
+    padding: 20px;
+  }
+  .base-info{
+    max-width: 300px;
+    padding: 20px;
+  }
+}

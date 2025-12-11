@@ -5,6 +5,7 @@ import type {  LoginResponse,SignupInfo } from "@/interface/User";
 import { defineStore } from "pinia";
 import { toastStore } from "./toastStore";
 import { me } from "@/api/me.api";
+import { modifyInfo } from "@/api/modifyInfo.api";
 
 
 export const userStore = defineStore('userStore',{
@@ -62,11 +63,15 @@ export const userStore = defineStore('userStore',{
       if(token.length < 10) return;
 
       const result = await me(token);
-      console.log(result);
       if(result == null) return;
       this.userInfo = result;
       this.userInfo.token = token;
       this.isLogin = true;
+    },
+
+    //修改用户信息逻辑
+    async modifyInfoAction(info:LoginResponse){
+      return await modifyInfo(info);
     }
   },
 
