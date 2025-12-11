@@ -81,6 +81,7 @@ import { reactive, ref } from 'vue';
 import '@/styles/loginAndSignup.css'
 import { userStore } from '@/store/userStore';
 import type { SignupInfo } from '@/interface/User';
+import userVerify from '@/utils/userVerify';
 
 
 const userInfo  = reactive<SignupInfo>({
@@ -105,7 +106,6 @@ let infoHint = reactive({
 
 
 async function submitSignup(){
-  console.log('开始'+inputVerify());
   if(!inputVerify()) return;
   console.log('异常前');
   await userStore().signupAction(userInfo);
@@ -119,35 +119,41 @@ function inputVerify(){
 
   if(!mainForm.value?.reportValidity()) return;
 
+  const {username,password,email,name,telephone} = userInfo
+  const {isUsernameValid,isPasswordValid,isEmailValid,isNameValid,isTelephoneValid} = userVerify;
+
   //TODO　看看这是什么意思
   for(let key in infoHint) infoHint[key as keyof typeof infoHint] = '';
 
-  if(userInfo.username.length < 4 || userInfo.username.length > 16)
+  let isVerify = true;
+
+  if(!isUsernameValid(username))
   {
     infoHint.username = '用户名格式有误';
-    return false
+    isVerify = false
   }
-  if(userInfo.password.length < 6 || userInfo.password.length > 16)
+  if(!isPasswordValid(password))
   {
     infoHint.password = '密码格式有误';
-    return false
+    isVerify = false
   }
-  if(userInfo.email.length < 5 || userInfo.email.length > 250)
+  if(!isEmailValid(email))
   {
     infoHint.email = '邮箱长度异常';
-    return false
+    isVerify = false
   }
-  if(userInfo.name.length < 2 || userInfo.name.length > 250)
+  if(!isNameValid(name))
   {
     infoHint.name = '姓名长度异常';
-    return false
+    isVerify = false
   }
-  if(userInfo.telephone.length != 11)
+  if(!isTelephoneValid(telephone))
   {
     infoHint.telephone = '手机号长度异常';
-    return false
+    isVerify = false
   }
-  return true;
+
+  return isVerify;
 }
 
 

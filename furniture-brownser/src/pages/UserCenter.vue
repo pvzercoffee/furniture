@@ -4,31 +4,59 @@
       <h1 class="path">首页>>个人中心</h1>
       <h2 class="title-big">个人中心</h2>
       <hr class="color-hr">
-      <div class="login-frame">
-          <div class="user">
-            <div class="head">
-              <div class="avatar"></div>
-              <p class="avatar-text">
-                {{ userData.userInfo.value.username }}
-                <button type="button" class="click-text" @click="exit">退出登录</button>
-              </p>
-            </div>
-            <div class="base-info">
 
-              <p class="base-info-item">姓名：{{ userData.userInfo.value.name }}</p>
-              <hr class="item-split" />
-              <p class="base-info-item">性别：{{ (userData.userInfo.value.gender == 1 ? '男' : '女') }}</p>
-              <hr class="item-split" />
-              <p class="base-info-item">邮箱：{{ userData.userInfo.value.email }}</p>
-              <hr class="item-split" />
-              <p class="base-info-item">手机：{{ userData.userInfo.value.telephone }}</p>
-              <hr class="item-split" />
-              <p class="base-info-item">生日：{{ userData.userInfo.value.birthday }}</p>
-              <hr class="item-split" />
-            </div>
+      <div class="login-frame">
+
+        <div class="user">
+        <div class="head">
+          <div class="avatar"></div>
+          <p class="avatar-text">
+            {{ userData.userInfo.value.username }}
+          </p>
+        </div>
+        <div class="base-info">
+
+          <div class="info-list">
+            <p class="base-info-item">用户名：{{ userData.userInfo.value.username }}</p>
+            <button type="button" @click="modifyInfo" class="base-button">修改</button>
           </div>
+          <hr class="item-split" />
+          <div class="info-list">
+            <p class="base-info-item">姓名：{{ userData.userInfo.value.name }}</p>
+            <button type="button" @click="modifyInfo" class="base-button">修改</button>
+          </div>
+          <hr class="item-split" />
+          <div class="info-list">
+            <p class="base-info-item">性别：{{ (userData.userInfo.value.gender == 1 ? '男' : '女') }}</p>
+            <button type="button" @click="modifyInfo" class="base-button">修改</button>
+          </div>
+          <hr class="item-split" />
+          <div class="info-list">
+            <p class="base-info-item">邮箱：{{ userData.userInfo.value.email }}</p>
+            <button type="button" @click="modifyInfo" class="base-button">修改</button>
+          </div>
+          <hr class="item-split" />
+          <div class="info-list">
+            <p class="base-info-item">手机：{{ userData.userInfo.value.telephone }}</p>
+            <button type="button" @click="modifyInfo" class="base-button">修改</button>
+          </div>
+          <hr class="item-split" />
+          <div class="info-list">
+            <p class="base-info-item">生日：{{ userData.userInfo.value.birthday }}</p>
+            <button type="button" @click="modifyInfo" class="base-button">修改</button>
+          </div>
+
+          <hr class="item-split" />
+
+          <div class="bottom">
+            <button type="button" class="click-text" @click="modifyInfo">修改信息</button>
+            <button type="button" class="click-text" @click="exit">退出登录</button>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+
 </template>
 
 <script setup lang="ts">
@@ -39,16 +67,21 @@ import { useRouter } from 'vue-router';
 import { userStore } from '@/store/userStore';
 import { storeToRefs } from 'pinia';
 import { toastStore } from '@/store/toastStore';
+import ModifyInfo from '@/components/ModifyInfo.vue';
 
 const user = userStore();
 const userData = storeToRefs(user);
 
 //退出登录
-function exit(){
+const exit = ()=>{
   user.exit();
   toastStore().show('已退出登录');
 }
 
+//修改用户信息
+const modifyInfo = ()=>{
+
+}
 
 const router = useRouter();
 
@@ -69,6 +102,17 @@ watch(userData.isLogin,()=>{
 
 .login-frame{
   background-image: url('@/images/注册.jpg');
+
+}
+.base-button{
+  width: 90px;
+  height: 30px;
+  margin-top: 12px;
+  margin-left: auto;
+  border: 0;
+}
+.base-button:hover{
+  background-color: #ccc;
 }
 .head{
   display: flex;
@@ -97,13 +141,19 @@ watch(userData.isLogin,()=>{
   text-decoration: underline;
   color: chocolate;
   border: 0;
+  flex: 1;
   background-color: #ffffff00;
 }
+
 .avatar-text{
   margin: auto;
   margin-top: 15px;
   font-size: 18px;
 
+}
+.info-list{
+  display: flex;
+  flex-wrap: wrap;
 }
 .base-info{
   margin: auto;
@@ -130,8 +180,13 @@ watch(userData.isLogin,()=>{
   display: flex;
   flex-direction: column;
   margin:30px;
-
 }
+.bottom{
+  display: flex;
+  width: 100%;
+  margin-top: 30px;
+}
+
 @media(max-width:768px){
   .head{
     max-width: 300px;
@@ -141,6 +196,5 @@ watch(userData.isLogin,()=>{
     max-width: 300px;
     padding: 20px;
   }
-
 }
 </style>
