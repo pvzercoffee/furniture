@@ -10,4 +10,5 @@ public interface UserService {
     void signup(User user);
     LoginInfo login(User user);
     LoginInfo me(String token);
+    void modify(User user);
 }

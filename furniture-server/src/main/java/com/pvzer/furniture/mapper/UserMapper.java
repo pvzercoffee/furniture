@@ -5,6 +5,7 @@ import com.pvzer.furniture.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
@@ -16,4 +17,6 @@ public interface UserMapper {
 
     @Select("select username,email,name,telephone,birthday,gender from users where id = #{id} and username = #{username}")
     public LoginInfo me(Integer id,String username);
+
+    void modify(User user);
 }

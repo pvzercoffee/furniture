@@ -61,7 +61,10 @@ export const userStore = defineStore('userStore',{
       if(token == '' || token == ' ') return;
       if(token.length < 10) return;
 
-      this.userInfo = await me(token);
+      const result = await me(token);
+      console.log(result);
+      if(result == null) return;
+      this.userInfo = result;
       this.userInfo.token = token;
       this.isLogin = true;
     }

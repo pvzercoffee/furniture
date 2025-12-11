@@ -25,11 +25,17 @@ public class UserController {
         return Result.success(data);
     }
 
+    //查询个人信息
     @PostMapping("/me")
     public Result me(@RequestHeader String token){
-
-        System.out.println("Hello世界");
         LoginInfo loginInfo = userServiceImpl.me(token);
         return Result.success(loginInfo);
+    }
+
+    //个人信息修改
+    @PutMapping("/user")
+    public Result modify(@RequestBody User modifyUser){
+        userServiceImpl.modify(modifyUser);
+        return Result.success("修改成功，请重新登录",null);
     }
 }

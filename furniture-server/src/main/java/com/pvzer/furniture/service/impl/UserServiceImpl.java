@@ -8,10 +8,12 @@ import com.pvzer.furniture.mapper.UserMapper;
 import com.pvzer.furniture.pojo.LoginInfo;
 import com.pvzer.furniture.pojo.User;
 import com.pvzer.furniture.service.UserService;
+import com.pvzer.furniture.utils.CurrentHolder;
 import com.pvzer.furniture.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -25,7 +27,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     SecurityConfig securityConfig;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    //注册业务
     @Override
     public void signup(User user) {
 
@@ -46,7 +51,6 @@ public class UserServiceImpl implements UserService {
         //密码错误抛异常
         if(result == null || !securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()))
         {
-
             throw new SelectErrorException();
         }
 
@@ -71,6 +75,7 @@ public class UserServiceImpl implements UserService {
         return loginInfo;
     }
 
+    //查询个人信息业务
     @Override
     public LoginInfo me(String token) {
 
@@ -81,5 +86,19 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.me(id,username);
 
+    }
+
+    //修改信息业务
+    @Override
+    public void modify(User user) {
+        //确保id一致
+        user.setId(CurrentHolder.getCurrentId());
+        //给密码加密
+        if(user.getPassword() != null){
+            String encodeingPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodeingPassword);
+        }
+
+        userMapper.modify(user);
     }
 }
