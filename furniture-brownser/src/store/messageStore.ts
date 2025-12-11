@@ -50,9 +50,6 @@ export const messageStore = defineStore('useMessageStore',{
             this.messageList.splice(index-1,1);
           }
           mSet.add(element.id);
-
-
-
         }
 
         //转换日期

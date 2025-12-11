@@ -1,7 +1,7 @@
 import { login } from "@/api/login.api";
 import { signup } from "@/api/signup.api.";
 import type { ResultInfo } from "@/interface/ResultInfo";
-import type { LoginInfo, LoginResponse,SignupInfo } from "@/interface/User";
+import type {  LoginResponse,SignupInfo } from "@/interface/User";
 import { defineStore } from "pinia";
 import { toastStore } from "./toastStore";
 import { me } from "@/api/me.api";
@@ -30,9 +30,10 @@ export const userStore = defineStore('userStore',{
     },
 
     //注册业务逻辑
-    async signup(signupInfo:SignupInfo){
+    async signupAction(signupInfo:SignupInfo){
+      console.log('异步前');
       const result:ResultInfo = await signup(signupInfo);
-      toastStore().show(result.msg);
+      toastStore().show("提示"+result.msg);
     },
 
     //退出登录业务逻辑

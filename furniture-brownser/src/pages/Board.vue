@@ -135,7 +135,7 @@ const verify = ()=>{
 }
 
 //提交留言
-const submit = ()=>{
+const submit = async  ()=>{
 
   if(!verify()) return;
   const {itemList} = messageStore();
@@ -147,7 +147,7 @@ const submit = ()=>{
     .filter(item => item.status)
     .map(item=>item.id);
 
-  messageStore().addMessageAction(submitInfo);
+  await messageStore().addMessageAction(submitInfo);
   toast.show("留言发表成功");
   //加载留言列表
   messageKey.value++;

@@ -105,50 +105,49 @@ let infoHint = reactive({
 
 
 async function submitSignup(){
+  console.log('开始'+inputVerify());
   if(!inputVerify()) return;
-  await userStore().signup(userInfo);
+  console.log('异常前');
+  await userStore().signupAction(userInfo);
+  console.log('异常hou ');
 
 }
 
 let mainForm = ref<HTMLFormElement | null>(null);
 
 function inputVerify(){
-  console.log(typeof(userInfo.birthday));
+
   if(!mainForm.value?.reportValidity()) return;
 
   //TODO　看看这是什么意思
   for(let key in infoHint) infoHint[key as keyof typeof infoHint] = '';
 
-  let isValidate = true;
-
   if(userInfo.username.length < 4 || userInfo.username.length > 16)
   {
     infoHint.username = '用户名格式有误';
-    isValidate = false
+    return false
   }
   if(userInfo.password.length < 6 || userInfo.password.length > 16)
   {
     infoHint.password = '密码格式有误';
-    isValidate = false
+    return false
   }
   if(userInfo.email.length < 5 || userInfo.email.length > 250)
   {
     infoHint.email = '邮箱长度异常';
-    isValidate = false
+    return false
   }
   if(userInfo.name.length < 2 || userInfo.name.length > 250)
   {
     infoHint.name = '姓名长度异常';
-    isValidate = false
+    return false
   }
   if(userInfo.telephone.length != 11)
   {
     infoHint.telephone = '手机号长度异常';
-    isValidate = false
+    return false
   }
-
-  if(!isValidate) return false;
-
+  return true;
 }
 
 

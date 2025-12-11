@@ -74,7 +74,7 @@ watch(userData.isLogin,()=>{
   display: flex;
   flex-direction: column;
   background-color: rgb(253, 235, 216);
-  width: auto;
+  width: 300px;
   margin: auto;
   padding: 50px 83px 20px 83px;
   border-radius: 15px 15px 0 0;
@@ -108,6 +108,7 @@ watch(userData.isLogin,()=>{
 .base-info{
   margin: auto;
   background-color: #fff;
+  width: 416px;
   line-height: 55px;
   /* margin-top: 30px; */
   padding: 25px;
@@ -129,6 +130,17 @@ watch(userData.isLogin,()=>{
   display: flex;
   flex-direction: column;
   margin:30px;
+
+}
+@media(max-width:768px){
+  .head{
+    max-width: 300px;
+    padding: 20px;
+  }
+  .base-info{
+    max-width: 300px;
+    padding: 20px;
+  }
 
 }
 </style>
