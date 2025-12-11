@@ -8,8 +8,6 @@
 import { toastStore } from '@/store/toastStore';
 import { storeToRefs } from 'pinia';
 
-
-
 let property = toastStore();
 
 const {text,isShow} = storeToRefs(property);
@@ -20,13 +18,13 @@ const {text,isShow} = storeToRefs(property);
 .toast{
   /* width:100%;
   height:200px; */
-  background-color:#aad08d;
+  background-color:#ddd;
   position: fixed;
   z-index: 9999;
   border-radius: 5px;
   left:50%;
-  top:40%;
-  border: 1px solid #666;
+  top:25%;
+  box-shadow: -1px 1px 3px 0.5px #999;
   transform: translate(-50%,-50%);
 }
 

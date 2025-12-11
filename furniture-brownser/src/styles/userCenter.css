@@ -72,12 +72,6 @@
   margin: 0;
   padding: 0 0 0 20px;
 }
-.user-frame{
-  display: flex;
-  flex-direction:column;
-  margin: auto;
-  width: 100%;
-}
 .user{
   display: flex;
   flex-direction: column;
@@ -92,11 +86,12 @@
 
 @media(max-width:768px){
   .head{
-    max-width: 300px;
+    width: 280px;
     padding: 20px;
   }
   .base-info{
-    max-width: 300px;
-    padding: 20px;
+    width: 280px;
+    margin: 0;
+    padding: 0 40px 0 0 ;
   }
 }

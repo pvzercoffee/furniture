@@ -7,16 +7,16 @@
 
       <div class="login-frame">
 
-        <div class="user">
+      <div class="user">
         <div class="head">
           <div class="avatar"></div>
           <p class="avatar-text">
             {{ userData.userInfo.value.username }}
           </p>
         </div>
-        <div class="base-info">
+        <div class="base-info" >
 
-          <div class="info-list">
+          <div class="info-list" >
             <p class="base-info-item">用户：</p>
             <input type="text" class="info-input"  v-model="showData.username"/>
           </div>
@@ -50,8 +50,6 @@
           </div>
 
           <hr class="item-split" />
-
-
           <button type="button" class="click-text" v-show="isEditMode" @click="modifyInfo">修改信息</button>
           <button type="button" class="click-text" @click="exit">退出登录</button>
 
@@ -72,6 +70,7 @@ import { storeToRefs } from 'pinia';
 import '@/styles/userCenter.css'
 import { toastStore } from '@/store/toastStore';
 import type { LoginResponse } from '@/interface/User';
+import userVerify from '@/utils/userVerify';
 
 
 const user = userStore();
@@ -86,10 +85,30 @@ const exit = ()=>{
   toastStore().show('已退出登录');
 }
 
-
 //修改个人信息
 let isEditMode = ref(false);
 const modifyInfo = async ()=>{
+
+  const {username,name,email,telephone} = showData.value;
+  const {isUsernameValid,isNameValid,isEmailValid,isTelephoneValid} = userVerify;
+
+  if(!isUsernameValid(username!)){
+    toastStore().show("用户名字数不规范");
+    return;
+  }
+  if(!isNameValid(name!)){
+    toastStore().show("姓名字数不规范");
+    return;
+  }
+  if(!isEmailValid(email!)){
+    toastStore().show("邮箱字数不规范");
+    return;
+  }
+  if(!isTelephoneValid(telephone!)){
+    toastStore().show("电话号码字数不规范");
+    return;
+  }
+
   const result = await user.modifyInfoAction(showData.value);
   if(result) Object.assign(user.userInfo,showData.value);
 }
