@@ -11,11 +11,23 @@
     </insert>
 
 
-
+    <select id="query">
+        select
+            msgs.id as id,
+            users.username as username,
+            msgs.name as name,
+            msgs.telephone as telephone,
+            msgs.email as email,
+            msgs.text as text,
+            msgs.create_time as create_time
+        from messages msgs
+            left join users on msgs.user_id = users.id
+        order by create_time desc
+    </select>
 
     <!--    根据留言id查出留言用户名和留言所有的item-->
-    <select id="queryItems" resultType="com.pvzer.furniture.pojo.MessageQueryInfo">
-        select users.name as username,items.name as item from message_items_link link
+    <select id="queryItems" resultType="java.lang.String">
+        select items.name as item from message_items_link link
             left join items on link.item_id = items.id
             left join messages msgs on msgs.id = link.message_id
             left join users on users.id = msgs.user_id where link.message_id = #{messageId};

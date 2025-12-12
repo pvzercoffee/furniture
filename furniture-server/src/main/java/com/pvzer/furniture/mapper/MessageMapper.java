@@ -2,8 +2,6 @@ package com.pvzer.furniture.mapper;
 
 import com.pvzer.furniture.pojo.Message;
 import com.pvzer.furniture.pojo.MessageInfo;
-import com.pvzer.furniture.pojo.MessageItem;
-import com.pvzer.furniture.pojo.MessageQueryInfo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -21,23 +19,22 @@ public interface MessageMapper {
     void addToMessageItemsLink(Integer messageId,List<Integer> itemList);
 
     //查询留言内容
-    @Select("select id,user_id,name,telephone,email,text from messages")
-    List<Message> query();
+    List<MessageInfo> query();
 
     //查询留言条目数
     @Select("select count(id) from messages")
     Integer queryNum();
 
     //查询单条留言的item名
-    List<MessageQueryInfo> queryItems(Integer messageId);
+    List<String> queryItems(Integer messageId);
 
     //删除留言内容
-    @Delete("delete from messages where id = #{messageId}")
-    void delete(Integer messageId);
+    @Delete("delete from messages where id = #{messageId} and user_id = #{userId}")
+    Integer delete(Integer messageId,Integer userId);
 
     //删除留言多表关系
-    @Delete("delete from message_items_link where message_id = #{messageId}")
-    void deleteLink(Integer messageId);
+    @Delete("delete from message_items_link where message_id = #{messageId} ")
+    Integer deleteLink(Integer messageId);
 
     //查询可用留言项目
     @Select("select id,name from items order by id")

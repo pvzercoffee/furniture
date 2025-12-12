@@ -2,27 +2,40 @@ package com.pvzer.furniture.exception;
 
 import com.pvzer.furniture.pojo.Result;
 import io.jsonwebtoken.JwtException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.*;
+
 @RestControllerAdvice
 public class GolbalExceptionHandler {
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    private class ExceptionContext{
+        private String error;
+        private String result;
+    }
+
     @ExceptionHandler(Exception.class)
     public Result handlerException(Exception e){
 
-        System.out.println("来自全局异常的输出："+e.getMessage());
+        List<ExceptionContext> exceptionSet = new LinkedList<>();
+        exceptionSet.add(new ExceptionContext("for key 'username'","这个用户名已经被使用了，换一个吧"));
+        exceptionSet.add(new ExceptionContext("for key 'email'", "该邮箱已被注册"));
+        exceptionSet.add(new ExceptionContext("for key 'telephone'", "手机号已被注册"));
+        exceptionSet.add(new ExceptionContext("because \"result\" is null", "用户名或密码错误"));
+        exceptionSet.add(new ExceptionContext("删除失败", "删除失败"));
 
-        if(e.getMessage().contains("for key 'username'")) {
-            return Result.error("这个用户名已经被使用了，换一个吧");
-        }
-        if(e.getMessage().contains("for key 'email'")) {
-            return Result.error("该邮箱已被注册");
-        }
-        if(e.getMessage().contains("for key 'telephone'")) {
-            return Result.error("手机号已被注册");
-        }
-        if(e.getMessage().contains("because \"result\" is null")){
-            return Result.error("用户名或密码错误");
+        for(ExceptionContext context : exceptionSet){
+            if(e.getMessage().contains(context.getError())){
+                System.out.println("来自全局异常的输出："+context.getResult());
+                return Result.error(context.getResult());
+            }
         }
 
         return Result.error("出错了，请联系管理员");
