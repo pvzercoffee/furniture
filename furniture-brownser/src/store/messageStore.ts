@@ -6,6 +6,7 @@ import { defineStore } from "pinia";
 import { toastStore } from "./toastStore";
 import { queryMessage } from "@/api/queryMessage.api";
 import { getPassTime } from "@/utils/getPassTime";
+import { deleteMessage } from "@/api/deleteMessage.api";
 
 export const messageStore = defineStore('useMessageStore',{
 
@@ -32,7 +33,7 @@ export const messageStore = defineStore('useMessageStore',{
     async queryMessageAction(page:number){
       try{
         const res = await queryMessage(page);
-        const {messages,total} = res;
+        const {messages,total}:{messages:MessageResponse[],total:number} = res;
 
         //转换日期
         messages.forEach((element:MessageResponse,index:number)=>{
@@ -42,8 +43,10 @@ export const messageStore = defineStore('useMessageStore',{
         });
 
         this.messageTotal = total;
-        this.messageList.push(...messages);
 
+        let localId = new Set(this.messageList.map(value=>value.id));
+        const newMessage = messages.filter(msgs=>!localId.has(msgs.id));
+        this.messageList.push(...newMessage);
 
         return this.messageList;
       }catch(e){
@@ -51,13 +54,22 @@ export const messageStore = defineStore('useMessageStore',{
         return [];
       }
     },
+
+    //删除留言
+    async deleteMessageAction(message_id:number){
+      const result = await deleteMessage(message_id);
+      return result;
+    }
   },
 
   state(){
     return{
       itemList:<ItemResponse[]>[],
       messageList:<MessageResponse[]>[],
-      messageTotal:0
+      messageTotal:0,
+      page:1,
+      pageSize : 10,
+      update:0
     }
   }
 });

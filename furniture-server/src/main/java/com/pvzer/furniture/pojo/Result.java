@@ -37,7 +37,7 @@ public class Result {
         Result result = new Result();
         result.code = 1;
         result.msg = msg;
-
+        result.data = data;
 
         return result;
     }

@@ -27,16 +27,23 @@ public class MessageController {
 
     //查询留言
     @GetMapping
-    public Result query(@RequestParam Integer page, @RequestParam Integer pageSize){
-        Map<String,Object> messageInfoList =  messageService.query(page,pageSize);
+    public Result queryAll(@RequestParam Integer page, @RequestParam Integer pageSize){
+        Map<String,Object> messageInfoList =  messageService.queryAll(page,pageSize);
+        return Result.success(messageInfoList);
+    }
+    //查询指定用户留言
+    @GetMapping("/{username}")
+    public Result query(@PathVariable String username, @RequestParam Integer page, @RequestParam Integer pageSize){
+        Map<String,Object> messageInfoList =  messageService.queryByUsername(username,page,pageSize);
         return Result.success(messageInfoList);
     }
 
     //删除留言
     @DeleteMapping("/{messageId}")
     public Result delete(@PathVariable Integer messageId){
-        messageService.delete(messageId);
-        return Result.success("已删除");
+        Integer id = messageService.delete(messageId);
+        System.out.println("我的id是："+id);
+        return Result.success("已删除",id);
     }
 
     //查询留言可选项目

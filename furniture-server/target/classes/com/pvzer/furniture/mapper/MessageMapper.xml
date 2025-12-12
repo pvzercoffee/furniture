@@ -10,8 +10,8 @@
         </foreach>
     </insert>
 
-
-    <select id="query">
+<!--    //查询全部留言-->
+    <select id="queryAll">
         select
             msgs.id as id,
             users.username as username,
@@ -22,6 +22,21 @@
             msgs.create_time as create_time
         from messages msgs
             left join users on msgs.user_id = users.id
+        order by create_time desc
+    </select>
+
+    <select id="queryByUsername">
+        select
+            msgs.id as id,
+            users.username as username,
+            msgs.name as name,
+            msgs.telephone as telephone,
+            msgs.email as email,
+            msgs.text as text,
+            msgs.create_time as create_time
+        from messages msgs
+                 left join users on msgs.user_id = users.id
+        where users.username = #{username}
         order by create_time desc
     </select>
 

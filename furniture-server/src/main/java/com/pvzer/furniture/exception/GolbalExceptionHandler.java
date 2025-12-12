@@ -38,7 +38,7 @@ public class GolbalExceptionHandler {
             }
         }
 
-        return Result.error("出错了，请联系管理员");
+        return Result.error("出错了，请联系管理员"+e.getMessage());
     }
 
     @ExceptionHandler(SelectErrorException.class)

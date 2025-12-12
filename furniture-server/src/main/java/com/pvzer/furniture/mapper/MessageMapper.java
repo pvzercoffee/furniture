@@ -19,7 +19,10 @@ public interface MessageMapper {
     void addToMessageItemsLink(Integer messageId,List<Integer> itemList);
 
     //查询留言内容
-    List<MessageInfo> query();
+    List<MessageInfo> queryAll();
+
+    //查询指定用户的留言内容
+    List<MessageInfo> queryByUsername(String username);
 
     //查询留言条目数
     @Select("select count(id) from messages")

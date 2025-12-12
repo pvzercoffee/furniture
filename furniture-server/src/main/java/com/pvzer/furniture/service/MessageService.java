@@ -8,7 +8,8 @@ import java.util.Map;
 
 public interface MessageService {
     void add(Message message);
-    void delete(Integer id);
-    Map<String,Object> query(Integer page, Integer pageSize);
+    Integer delete(Integer id);
+    Map<String,Object> queryAll(Integer page, Integer pageSize);
     List<Map<Integer,String>> queryItem();
+    Map<String,Object> queryByUsername(String username,Integer page, Integer pageSize);
 }

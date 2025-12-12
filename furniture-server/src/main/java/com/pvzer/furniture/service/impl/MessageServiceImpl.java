@@ -34,15 +34,8 @@ public class MessageServiceImpl implements MessageService {
         messageMapper.addToMessageItemsLink(messageId,message.getItemList());
     }
 
-    //查询留言业务
-    public Map<String,Object> query(Integer page, Integer pageSize) {
-
-        PageHelper.startPage(page,pageSize);
-
-        //查出留言列表
-        List<MessageInfo> messageList = messageMapper.query();
-
-        List<MessageInfo> messageInfoList = new ArrayList<>();
+    //公共方法，通过查询到的留言返回获取total和，和每条留言的item，并封装好结果
+    public Map<String,Object> queryResult(List<MessageInfo> messageList){
 
         //获取每条留言的item
         for(MessageInfo msg : messageList){
@@ -52,7 +45,7 @@ public class MessageServiceImpl implements MessageService {
             //遍历新的信息，封装进messageInfo
 
             msg.setItemList(itemList);
-            messageInfoList.add(msg);
+
         }
 
         //查询总记录数
@@ -61,21 +54,42 @@ public class MessageServiceImpl implements MessageService {
         //把总记录数和留言列表组装到map一并发出
         Map<String,Object> result = new HashMap<>();
         result.put("total", total);
-        result.put("messages",messageInfoList);
+        result.put("messages",messageList);
 
         return result;
     }
 
-    //删除留言
+
+    //查询留言业务
+    public Map<String,Object> queryAll(Integer page, Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        //查出留言列表
+        List<MessageInfo> messageList = messageMapper.queryAll();
+
+        return queryResult(messageList);
+    }
+
+    //查出指定用户的留言的业务
+    @Override
+    public Map<String, Object> queryByUsername(String username, Integer page, Integer pageSize) {
+
+        PageHelper.startPage(page,pageSize);
+        //查出留言列表
+        List<MessageInfo> messageList = messageMapper.queryByUsername(username);
+
+        return queryResult(messageList);
+    }
+
+    //删除留言业务,返回删除的id
     @Override
     @Transactional
-    public void delete(Integer id) {
-
+    public Integer delete(Integer id) {
         messageMapper.deleteLink(id);
         int rows = messageMapper.delete(id,CurrentHolder.getCurrentId());
         if(rows == 0){
             throw new RuntimeException("删除失败，找不到当前用户的这条留言");
         }
+        return id;
     }
 
     //查询可用项目
@@ -83,4 +97,8 @@ public class MessageServiceImpl implements MessageService {
     public List<Map<Integer,String>> queryItem() {
         return messageMapper.queryItem();
     }
+
+
+
+
 }

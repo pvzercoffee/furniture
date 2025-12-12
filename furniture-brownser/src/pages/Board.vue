@@ -42,7 +42,7 @@
               </div>
           </div>
           <!-- 留言展示 -->
-          <ShowMessage :key="messageKey"/>
+          <ShowMessage />
       </div>
     </div>
 </template>
@@ -55,9 +55,17 @@ import { messageStore } from '@/store/messageStore';
 import { toastStore } from '@/store/toastStore';
 import { userStore } from '@/store/userStore';
 import '@/styles/board.css'
+import { storeToRefs } from 'pinia';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 
-let messageKey = ref(0);
+let messageKey = ref(0)
+
+const msg = storeToRefs(messageStore());
+
+//控制留言更新
+watch(msg.update,()=>{
+  messageKey.value++;
+});
 
 //提交给后端的信息
 let submitInfo = reactive({
@@ -150,7 +158,7 @@ const submit = async  ()=>{
   await messageStore().addMessageAction(submitInfo);
   toast.show("留言发表成功");
   //加载留言列表
-  messageKey.value++;
+  msg.update.value++;
 
   //发表后清除表单
   submitInfo.email = submitInfo.name = submitInfo.telephone = submitInfo.text = '';
