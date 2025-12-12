@@ -45,7 +45,6 @@ public class UserServiceImpl implements UserService {
         //LoginInfo不下发密码，因此查询结果用User封装
         User result =  userMapper.login(user);
 
-        System.out.println("tesy");
         System.out.println(securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()));
 
         //密码错误抛异常
@@ -64,10 +63,9 @@ public class UserServiceImpl implements UserService {
         loginInfo.setUsername(result.getUsername());
         loginInfo.setBirthday(result.getBirthday());
 
-        //把id和username作为令牌载荷
+        //把id作为令牌载荷
         Map<String,Object> claims = new HashMap<>();
         claims.put("id",result.getId());
-        claims.put("username",loginInfo.getUsername());
 
         //创建令牌并传给LoginInfo
         loginInfo.setToken(JwtUtils.generateToken(claims));
@@ -82,9 +80,8 @@ public class UserServiceImpl implements UserService {
         //根据token返回用户信息
         Claims claims = JwtUtils.parseToken(token);
         Integer id = (Integer) claims.get("id");
-        String username = (String) claims.get("username");
 
-        return userMapper.me(id,username);
+        return userMapper.me(id);
 
     }
 

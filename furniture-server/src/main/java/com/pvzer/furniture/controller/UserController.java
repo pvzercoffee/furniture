@@ -36,6 +36,6 @@ public class UserController {
     @PutMapping("/user")
     public Result modify(@RequestBody User modifyUser){
         userServiceImpl.modify(modifyUser);
-        return Result.success("修改成功，请重新登录",null);
+        return Result.success("修改成功",null);
     }
 }
