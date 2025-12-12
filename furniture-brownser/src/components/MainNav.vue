@@ -2,7 +2,7 @@
 <nav>
     <div class="logo"></div>
     <ul class="items">
-
+        <li><a class="nav-link">菜单</a></li>
         <li><RouterLink replace :to="{name:'home'}" class="nav-link">首页</RouterLink></li>
         <li><RouterLink replace :to="{name:'show'}" class="nav-link">产品展示</RouterLink></li>
         <li><RouterLink replace :to="{name:'about'}" class="nav-link">关于我们</RouterLink></li>
@@ -25,8 +25,8 @@ nav{
     width:100%;
     height: 70px;
     background-color:rgb(253, 235, 216);
-    overflow: hidden;
-    z-index: 999;
+    /* overflow: hidden; */
+    z-index: -2;
     display: flex;
 }
 .logo{
@@ -43,9 +43,13 @@ nav{
     display: flex;
     list-style-type: none;
     gap: 30px;
-    z-index: 999;
+    z-index: 0;
+    /* overflow: hidden; */
     line-height: 40px;
     flex: 1;
+}
+.items:hover{
+  z-index: 999;
 }
 .nav-link:link,.footer-link{
     text-decoration: none;

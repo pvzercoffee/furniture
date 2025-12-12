@@ -43,10 +43,9 @@ export const messageStore = defineStore('useMessageStore',{
         });
 
         this.messageTotal = total;
+        this.messageList.push(...messages);
+        this.update++;
 
-        let localId = new Set(this.messageList.map(value=>value.id));
-        const newMessage = messages.filter(msgs=>!localId.has(msgs.id));
-        this.messageList.push(...newMessage);
 
         return this.messageList;
       }catch(e){

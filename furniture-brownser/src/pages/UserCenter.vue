@@ -1,6 +1,6 @@
 <template>
   <div class="page-user">
-
+    <Carousel />
       <h1 class="path">首页>>个人中心</h1>
       <h2 class="title-big">个人中心</h2>
       <hr class="color-hr">
@@ -71,7 +71,7 @@ import '@/styles/userCenter.css'
 import { toastStore } from '@/store/toastStore';
 import type { LoginResponse } from '@/interface/User';
 import userVerify from '@/utils/userVerify';
-
+import Carousel from '@/components/Carousel.vue';
 
 const user = userStore();
 const userData = storeToRefs(user);

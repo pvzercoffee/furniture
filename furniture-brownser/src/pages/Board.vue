@@ -60,10 +60,10 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
 
 let messageKey = ref(0)
 
-const msg = storeToRefs(messageStore());
+const msg = messageStore();
 
 //控制留言更新
-watch(msg.update,()=>{
+watch(()=>msg.update,()=>{
   messageKey.value++;
 });
 
@@ -146,7 +146,8 @@ const verify = ()=>{
 const submit = async  ()=>{
 
   if(!verify()) return;
-  const {itemList} = messageStore();
+  const msg = messageStore();
+  const {itemList} = msg;
 
   //arr.filter(item=>bool)：剔除所有不符合bool的元素
   //arr.map(item=>bool)：返回一个属性组成的新arr
@@ -155,10 +156,13 @@ const submit = async  ()=>{
     .filter(item => item.status)
     .map(item=>item.id);
 
-  await messageStore().addMessageAction(submitInfo);
+  await msg.addMessageAction(submitInfo);
   toast.show("留言发表成功");
   //加载留言列表
-  msg.update.value++;
+  msg.page = 1;
+  msg.messageList = [];
+  await msg.queryMessageAction(msg.page);
+  msg.update++;
 
   //发表后清除表单
   submitInfo.email = submitInfo.name = submitInfo.telephone = submitInfo.text = '';
