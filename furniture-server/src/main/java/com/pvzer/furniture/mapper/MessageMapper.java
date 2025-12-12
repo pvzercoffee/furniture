@@ -20,12 +20,16 @@ public interface MessageMapper {
     //维护一留言对多item的表
     void addToMessageItemsLink(Integer messageId,List<Integer> itemList);
 
-    //查询留言内容,最新日期在上
-    List<MessageInfo> query();
+    //查询留言内容
+    @Select("select id,user_id,name,telephone,email,text from messages")
+    List<Message> query();
 
     //查询留言条目数
     @Select("select count(id) from messages")
     Integer queryNum();
+
+    //查询单条留言的item名
+    List<MessageQueryInfo> queryItems(Integer messageId);
 
     //删除留言内容
     @Delete("delete from messages where id = #{messageId}")

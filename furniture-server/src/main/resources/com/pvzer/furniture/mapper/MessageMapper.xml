@@ -10,37 +10,15 @@
         </foreach>
     </insert>
 
-    <resultMap id="messageMap" type="com.pvzer.furniture.pojo.MessageInfo">
 
-        <id column="msgs_id" property="id"/>
-        <result column="users_username" property="username" />
-        <result column="msgs_name" property="name" />
-        <result column="msgs_telephone" property="telephone" />
-        <result column="msgs_email" property="email" />
-        <result column="msgs_text" property="text" />
-        <result column="msgs_create_time" property="createTime" />
-        <collection property="itemList" javaType="java.util.List" ofType="java.lang.String">
-            <result column="items_name" />
-        </collection>
-    </resultMap>
+
 
     <!--    根据留言id查出留言用户名和留言所有的item-->
-    <select id="query" resultMap="messageMap">
-        select
-               msgs.id as msgs_id,
-               users.username as users_username,
-               msgs.name as msgs_name,
-               msgs.telephone as mags_telephone,
-               msgs.email as msgs_email,
-               msgs.text as msgs_text,
-               msgs.create_time as msgs_create_time,
-               items.name as items_name
-        from message_items_link link
-                 left join items on link.item_id = items.id
-                 left join messages msgs on msgs.id = link.message_id
-                 left join users on users.id = msgs.user_id
-        order by msgs.create_time desc
-
+    <select id="queryItems" resultType="com.pvzer.furniture.pojo.MessageQueryInfo">
+        select users.name as username,items.name as item from message_items_link link
+            left join items on link.item_id = items.id
+            left join messages msgs on msgs.id = link.message_id
+            left join users on users.id = msgs.user_id where link.message_id = #{messageId};
     </select>
 
 </mapper>

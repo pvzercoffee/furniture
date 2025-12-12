@@ -32,32 +32,17 @@ export const messageStore = defineStore('useMessageStore',{
     async queryMessageAction(page:number){
       try{
         const res = await queryMessage(page);
-        const mSet = new Set<number>();
-
-        this.messageList.push(...res.messages)
-        this.messageTotal = res.total;
-
-        //去除重复结果
-
-        for(let index = 0;index < this.messageList.length;index++){
-
-          let element = this.messageList[index]!;
-
-          if(mSet.has(element.id)){
-            if(this.messageList[index]?.itemList){
-              this.messageList[index-1]?.itemList.push(...this.messageList?.[index]?.itemList ?? []);
-            }
-            this.messageList.splice(index-1,1);
-          }
-          mSet.add(element.id);
-        }
+        const {messages,total} = res;
 
         //转换日期
-        this.messageList.forEach((element,index)=>{
-          if(this.messageList[index]?.createTime){
-            this.messageList[index]!.createTime = getPassTime(new Date(element.createTime)) || element.createTime
+        messages.forEach((element:MessageResponse,index:number)=>{
+          if(messages[index]?.createTime){
+            messages[index]!.createTime = getPassTime(new Date(element.createTime)) || element.createTime
           }
         });
+
+        this.messageTotal = total;
+        this.messageList.push(...messages);
 
 
         return this.messageList;

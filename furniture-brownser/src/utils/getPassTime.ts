@@ -5,5 +5,5 @@ export const getPassTime = (value:Date)=>{
   if(now-time < 60) return `${Math.floor(now-time)}秒前`;
   else if(now-time < 60*60) return `${Math.floor((now-time)/60)}分钟前`;
   else if(now-time < 60*60*24) return `${Math.floor((now-time)/60/60)}小时前`;
-  else if(now-time < 60*60*24*7) return `${Math.floor((now-time)/60/24/7)}天前`;
+  else if(now-time < 60*60*24*7) return `${Math.floor((now-time)/60/60/24)}天前`;
 }
