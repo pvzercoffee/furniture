@@ -32,9 +32,8 @@ export const userStore = defineStore('userStore',{
 
     //注册业务逻辑
     async signupAction(signupInfo:SignupInfo){
-      console.log('异步前');
       const result:ResultInfo = await signup(signupInfo);
-      toastStore().show("提示"+result.msg);
+      return result;
     },
 
     //退出登录业务逻辑

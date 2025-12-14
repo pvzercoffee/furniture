@@ -20,7 +20,7 @@ function parseText(time:number,now:number){
 }
 
 let timeout = ref('');
-const time = new Date('2025-12-12 00:00:00').getTime();
+const time = new Date('2026-12-12 00:00:00').getTime();
 let interval:any;
 
 onMounted(()=>{

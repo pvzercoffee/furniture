@@ -79,6 +79,7 @@ onMounted(()=>{
     width: 100%;
     margin-top: 20px;
     display: flex;
+    z-index: -10;
 }
 .about-left{
     width:280px;

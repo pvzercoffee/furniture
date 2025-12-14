@@ -82,6 +82,8 @@ import '@/styles/loginAndSignup.css'
 import { userStore } from '@/store/userStore';
 import type { SignupInfo } from '@/interface/User';
 import userVerify from '@/utils/userVerify';
+import { useRoute, useRouter } from 'vue-router';
+import { toastStore } from '@/store/toastStore';
 
 
 const userInfo  = reactive<SignupInfo>({
@@ -103,14 +105,23 @@ let infoHint = reactive({
   gender:'',
   birthday:'',
 });
-
+const toast = toastStore();
+const router = useRouter();
 
 async function submitSignup(){
   if(!inputVerify()) return;
-  console.log('异常前');
-  await userStore().signupAction(userInfo);
-  console.log('异常hou ');
+  const result = await userStore().signupAction(userInfo);
 
+  if(result.code == 1){
+    toast.show("注册成功~请登录");
+    router.replace({
+      name:'login'
+    });
+    return;
+  }
+  else{
+    toast.show(result.msg);
+  }
 }
 
 let mainForm = ref<HTMLFormElement | null>(null);
