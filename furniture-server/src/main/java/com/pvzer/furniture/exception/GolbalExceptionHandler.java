@@ -25,9 +25,10 @@ public class GolbalExceptionHandler {
     public Result handlerException(Exception e){
 
         List<ExceptionContext> exceptionSet = new LinkedList<>();
-        exceptionSet.add(new ExceptionContext("for key 'username'","这个用户名已经被使用了，换一个吧"));
-        exceptionSet.add(new ExceptionContext("for key 'email'", "该邮箱已被注册"));
-        exceptionSet.add(new ExceptionContext("for key 'telephone'", "手机号已被注册"));
+
+        exceptionSet.add(new ExceptionContext("username","这个用户名已经被使用了，换一个吧"));
+        exceptionSet.add(new ExceptionContext("email", "该邮箱已被注册"));
+        exceptionSet.add(new ExceptionContext("telephone", "手机号已被注册"));
         exceptionSet.add(new ExceptionContext("because \"result\" is null", "用户名或密码错误"));
         exceptionSet.add(new ExceptionContext("删除失败", "删除失败"));
 
