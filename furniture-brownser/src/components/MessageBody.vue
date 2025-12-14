@@ -57,6 +57,7 @@ const deleteMessage = async (message_id:number)=>{
     const msg = messageStore();
     if((msg.messageList.length-1)/msg.pageSize+1 < msg.page) msg.page--;
     msg.messageList = [];
+    msg.messageTotal = 0;
     for(let i = 1;i <= msg.page;i++){
       await msg.queryMessageAction(i);
       msg.update++;

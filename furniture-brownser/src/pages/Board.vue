@@ -56,7 +56,7 @@ import { toastStore } from '@/store/toastStore';
 import { userStore } from '@/store/userStore';
 import '@/styles/board.css'
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 
 let messageKey = ref(0)
 
@@ -146,7 +146,7 @@ const verify = ()=>{
 const submit = async  ()=>{
 
   if(!verify()) return;
-  const msg = messageStore();
+
   const {itemList} = msg;
 
   //arr.filter(item=>bool)：剔除所有不符合bool的元素
@@ -175,4 +175,6 @@ onMounted(()=>{
     messageStore().queryItemAction();
 
 });
+
+
 </script>

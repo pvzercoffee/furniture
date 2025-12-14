@@ -20,7 +20,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080/',
+        target: 'http://pvzer.cn/api/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

@@ -12,7 +12,7 @@
         <MessageBody v-for="value in messages.messageList" :key="value.id"  :data="value"/>
       </div>
 
-      <button type="button" class="view-button" :key="messages.update" @click="showMoreMessage">{{ remainMessage >= 1 ? `查看剩余${remainMessage}条留言` : '留言全部加载完毕' }}</button>
+      <button type="button" class="view-button" :key="messages.update" :disabled="acceptRefresh" @click="showMoreMessage">{{ remainMessage >= 1 ? `查看剩余${remainMessage}条留言` : '留言全部加载完毕' }}</button>
       </div>
   </div>
 
@@ -22,10 +22,11 @@
 
 import { messageStore } from '@/store/messageStore';
 import { userStore } from '@/store/userStore';
-import { computed, onMounted, onUnmounted, reactive, watch } from 'vue';
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import MessageBody from './MessageBody.vue';
 
 let messages = messageStore();
+let acceptRefresh = ref(false);
 
 //计算剩余未加载的留言数
 const remainMessage = computed(()=>{
@@ -33,11 +34,13 @@ const remainMessage = computed(()=>{
 });
 
 //加载留言
-const showMoreMessage = ()=>{
+const showMoreMessage = async ()=>{
+  acceptRefresh.value = true;
   if(remainMessage.value >= 1){
     messages.page++;
-    messageStore().queryMessageAction(messages.page)
+    await messageStore().queryMessageAction(messages.page)
   }
+  acceptRefresh.value = false;
 }
 
 //登录后立即加载留言
@@ -54,6 +57,7 @@ onMounted(()=>{
 //卸载组件时还原评论
 onUnmounted(()=>{
   messages.messageTotal = 0;
+  messages.page = 1;
   messages.messageList = [];
 });
 </script>
