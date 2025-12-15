@@ -1,3 +1,4 @@
+import { API_URL } from "@/constants/ApiConfig";
 import type { MessageResponse } from "@/interface/Message";
 import type { LoginResponse } from "@/interface/User";
 import { toastStore } from "@/store/toastStore";
@@ -7,7 +8,7 @@ import axios from "axios";
 
 export const modifyInfo = async (info:LoginResponse)=>{
   try{
-    const result = await axios.put(`/api/user`,info,{
+    const result = await axios.put(`${API_URL}/api/user`,info,{
       headers:{
         token:userStore().userInfo.token
       }

@@ -1,9 +1,10 @@
+import { API_URL } from "@/constants/ApiConfig";
 import type { MessageInfo } from "@/interface/Message";
 import { userStore } from "@/store/userStore";
 import axios from "axios";
 
 export const addMessage = async (message:MessageInfo)=>{
-  const result = await axios.post('/api/message',message,{
+  const result = await axios.post(API_URL+'/api/message',message,{
     headers:{
       token:userStore().userInfo.token
     }

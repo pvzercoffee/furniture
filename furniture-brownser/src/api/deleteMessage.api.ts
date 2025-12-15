@@ -1,3 +1,4 @@
+import { API_URL } from "@/constants/ApiConfig";
 import { toastStore } from "@/store/toastStore";
 import { userStore } from "@/store/userStore";
 import axios from "axios";
@@ -5,7 +6,7 @@ import axios from "axios";
 
 export const deleteMessage = async (message_id:number)=>{
   try{
-    const result = await axios.delete(`/api/message/${message_id}`,{
+    const result = await axios.delete(`${API_URL}/api/message/${message_id}`,{
       headers:{
         token:userStore().userInfo.token
       }

@@ -1,8 +1,9 @@
+import { API_URL } from "@/constants/ApiConfig";
 import type { LoginInfo, LoginResponse } from "@/interface/User";
 import axios from "axios";
 
 export async function me(token:string):Promise<LoginResponse>{
-  const result = await axios.post('/api/me',{},{
+  const result = await axios.post(API_URL+'/api/me',{},{
     headers:{
       token:token
     }

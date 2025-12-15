@@ -12,6 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/message")
+@CrossOrigin(origins = "*")  // 允许所有跨域请求
 public class MessageController {
 
     @Autowired

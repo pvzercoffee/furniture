@@ -1,3 +1,4 @@
+com\pvzer\furniture\config\CorsConfig.class
 com\pvzer\furniture\anno\NoInterCepte.class
 com\pvzer\furniture\service\MessageService.class
 com\pvzer\furniture\FurnitureApplication.class

@@ -1,3 +1,4 @@
+import { API_URL } from "@/constants/ApiConfig";
 import type { MessageResponse } from "@/interface/Message";
 import { messageStore } from "@/store/messageStore";
 import { userStore } from "@/store/userStore";
@@ -5,7 +6,7 @@ import axios from "axios";
 
 
 export const queryMessage = async (page:number)=>{
-  const result = await axios.get(`/api/message?&page=${page}&pageSize=${messageStore().pageSize}`,{
+  const result = await axios.get(`${API_URL}/api/message?&page=${page}&pageSize=${messageStore().pageSize}`,{
     headers:{
       token:userStore().userInfo.token
     }

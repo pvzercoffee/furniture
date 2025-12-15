@@ -3,7 +3,7 @@
     <div class="container">
       <div class="top">
         <p class="title">共有{{ messages.messageTotal }} 条留言</p>
-        <select class="top-select">
+        <select class="top-select" v-model="messageSelection">
           <option value="all">全部留言</option>
           <option value="self">只看我的</option>
         </select>
@@ -60,6 +60,14 @@ onUnmounted(()=>{
   messages.page = 1;
   messages.messageList = [];
 });
+
+//
+
+const selection = {
+  self:'self',
+  all:'all'
+}
+let messageSelection = ref(selection.self);
 </script>
 
 <style scoped>
