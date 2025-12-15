@@ -1,7 +1,7 @@
 <template>
 
-  <MainHeader />
-  <MainNav />
+  <MainHeader class="header"/>
+  <MainNav class="nav"/>
 
   <div class="main-content">
 
@@ -29,6 +29,5 @@ onMounted(()=>{
 
 <style scoped>
 @import url('@/styles/global.css');
-
 
 </style>

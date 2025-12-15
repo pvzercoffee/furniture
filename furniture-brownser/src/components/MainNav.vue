@@ -1,67 +1,70 @@
 <template>
-  <nav class="navbar">
-    <div class="logo" ></div>
-    <!-- 移动端汉堡按钮 -->
-    <button
-      class="mobile-menu-btn"
-      @click="toggleMobileMenu"
-      aria-label="菜单"
-    >
-      <!-- 三横杠图标 -->
-      <div class="hamburger" :class="{ 'active': isMobileMenuOpen }">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </button>
-
-    <!-- 桌面端横向导航 -->
-    <div class="desktop-nav">
-      <ul class="nav-list">
-        <li class="nav-item" v-for="item in navItems" :key="item.id">
-          <RouterLink
-                replace
-                :to="{path:item.path}"
-                @click="closeMobileMenu"
-                class="nav-link">
-                {{item.name}}
-              </RouterLink>
-        </li>
-      </ul>
-    </div>
-
-    <!-- 移动端侧边菜单 -->
-    <transition name="slide">
-      <div
-        v-if="isMobileMenuOpen"
-        class="mobile-menu-overlay"
-        @click="closeMobileMenu"
+  <div class="root">
+    <nav class="navbar">
+      <div class="logo" ></div>
+      <!-- 移动端汉堡按钮 -->
+      <button
+        class="mobile-menu-btn"
+        @click="toggleMobileMenu"
+        aria-label="菜单"
       >
-        <div class="mobile-sidebar" @click.stop>
-          <div class="mobile-header">
-            <button class="close-btn" @click="closeMobileMenu">
-              <span>&times;</span>
-            </button>
-          </div>
-          <ul class="mobile-nav-list">
-            <li
-              class="mobile-nav-item"
-              v-for="item in navItems"
-              :key="item.id"
-            >
-              <RouterLink
-                replace
-                :to="{path:item.path}"
-                @click="closeMobileMenu"
-                class="mobile-nav-link">
-                {{item.name}}
-              </RouterLink>
-            </li>
-          </ul>
+        <!-- 三横杠图标 -->
+        <div class="hamburger" :class="{ 'active': isMobileMenuOpen }">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
+      </button>
+
+      <!-- 桌面端横向导航 -->
+      <div class="desktop-nav">
+        <ul class="nav-list">
+          <li class="nav-item" v-for="item in navItems" :key="item.id">
+            <RouterLink
+                  replace
+                  :to="{path:item.path}"
+                  @click="closeMobileMenu"
+                  class="nav-link">
+                  {{item.name}}
+                </RouterLink>
+          </li>
+        </ul>
       </div>
-    </transition>
-  </nav>
+
+      <!-- 移动端侧边菜单 -->
+      <transition name="slide">
+        <div
+          v-if="isMobileMenuOpen"
+          class="mobile-menu-overlay"
+          @click="closeMobileMenu"
+        >
+          <div class="mobile-sidebar" @click.stop>
+            <div class="mobile-header">
+              <button class="close-btn" @click="closeMobileMenu">
+                <span>&times;</span>
+              </button>
+            </div>
+            <ul class="mobile-nav-list">
+              <li
+                class="mobile-nav-item"
+                v-for="item in navItems"
+                :key="item.id"
+              >
+                <RouterLink
+                  replace
+                  :to="{path:item.path}"
+                  @click="closeMobileMenu"
+                  class="mobile-nav-link">
+                  {{item.name}}
+                </RouterLink>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </transition>
+    </nav>
+    <div class="empty"></div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -122,11 +125,13 @@ onUnmounted(() => {
 
 <style scoped>
 .navbar {
-  position: relative;
+
   background-color:rgb(253, 235, 216);
   padding: 0 20px;
   height: 70px;
+  width: 100%;
   display: flex;
+  z-index: 999;
   align-items: center;
 }
 
@@ -136,7 +141,7 @@ onUnmounted(() => {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 10px;
+  padding: 70px;
   z-index: 1000;
 }
 
@@ -305,6 +310,14 @@ onUnmounted(() => {
 
   .navbar {
     justify-content: flex-end;
+  }
+  .empty{
+    height: 100px;
+    width: 100%;
+  }
+  .navbar{
+    position: fixed;
+    top: 30px;
   }
 }
 

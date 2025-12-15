@@ -11,6 +11,9 @@
             </div>
         <!-- </div> -->
     </header>
+    <div class="empty">
+
+    </div>
 </div>
 </template>
 
@@ -34,10 +37,18 @@ logined((loginInfo:any)=>{
 </script>
 
 <style scoped>
-
+.main-header{
+    line-height: 30px;
+    height: 30px;
+    z-index: 999;
+    overflow: hidden;
+    width: 100%;
+    background-color: aqua;
+}
 header{
     width:100%;
     line-height: 30px;
+    /* margin-bottom: 70px; */
     background-color: #000;
     color: #fff;
     font-size: 15px;
@@ -58,5 +69,12 @@ header>.icon{
 }
 .icon_email{
     background-position: 0 -73px;
+}
+@media(max-width:768px){
+  .main-header{
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
 }
 </style>
