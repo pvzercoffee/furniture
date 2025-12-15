@@ -7,7 +7,6 @@ import { toastStore } from "./toastStore";
 import { queryMessage } from "@/api/queryMessage.api";
 import { getPassTime } from "@/utils/getPassTime";
 import { deleteMessage } from "@/api/deleteMessage.api";
-import type { ResultInfo } from "@/interface/ResultInfo";
 import { queryMessageByUsername } from "@/api/queryMessageByUsername";
 
 //获取评论后解析与封装到state
@@ -32,6 +31,9 @@ const pushMessage = (res:any)=>{
     return [];
   }
 }
+
+//Toast消息提示
+// const toast = toastStore();
 
 export const messageStore = defineStore('useMessageStore',{
 

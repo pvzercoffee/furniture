@@ -11,40 +11,40 @@
               <div style="margin: auto;">
                 <div class="column">
                   <p class="font-text">用户名</p>
-                  <input type="text" class="form-input" required v-model="userInfo.username" placeholder="请输入用户名"  autocomplete="username" />
+                  <input type="text" class="form-input" required v-model="userInfo.username" :placeholder="usernameLimit.msg"  autocomplete="username" />
                   <p  v-text="infoHint.username"  class="font-error"></p>
                 </div>
 
                 <div class="column">
                   <p class="font-text">密码</p>
-                  <input type="password" class="form-input" required v-model="userInfo.password" placeholder="请输入密码"  autocomplete="current-password" />
+                  <input type="password" class="form-input" required v-model="userInfo.password" :placeholder="passwordLimit.msg"  autocomplete="current-password" />
                   <p  v-text="infoHint.password" class="font-error"></p>
                   <br />
                 </div>
 
                 <div class="column">
                   <p class="font-text">电子邮件</p>
-                  <input type="email" class="form-input" required  v-model="userInfo.email" placeholder="请输入邮箱"  autocomplete="email" />
+                  <input type="email" class="form-input" required  v-model="userInfo.email" :placeholder="emailLimit.msg"  autocomplete="email" />
                   <p  v-text="infoHint.email"  class="font-error"></p>
                   <br />
                 </div>
 
                 <div class="column">
                   <p class="font-text">姓名</p>
-                  <input type="text" class="form-input" required v-model="userInfo.name" placeholder="请输入真实姓名"  autocomplete="name" />
+                  <input type="text" class="form-input" required v-model="userInfo.name" :placeholder="nameLimit.msg"  autocomplete="name" />
                   <p v-text="infoHint.name" class="font-error"></p>
                   <br />
                 </div>
 
                 <div class="column">
                   <p class="font-text">手机号</p>
-                  <input type="tel" class="form-input" required v-model="userInfo.telephone" placeholder="请输入可用手机号"  autocomplete="tel" />
+                  <input type="tel" class="form-input" required v-model="userInfo.telephone" :placeholder="telephoneLimit.msg"  autocomplete="tel" />
                   <p  v-text="infoHint.telephone" class="font-error"></p>
                 </div>
 
                 <div class="column">
                   <p class="font-text">性别</p>
-                  <input type="radio" name="gender" v-model="userInfo.gender" value="1"/>男
+                  <input type="radio" name="gender" v-model="userInfo.gender" checked value="1"/>男
                   <input type="radio" name="gender" v-model="userInfo.gender" value="0"/>女
                   <br />
                 </div>
@@ -108,6 +108,8 @@ let infoHint = reactive({
 const toast = toastStore();
 const router = useRouter();
 
+const {usernameLimit,passwordLimit,emailLimit,nameLimit,telephoneLimit} = userVerify.LIMIT;
+
 async function submitSignup(){
   if(!inputVerify()) return;
   const result = await userStore().signupAction(userInfo);
@@ -140,27 +142,27 @@ function inputVerify(){
 
   if(!isUsernameValid(username))
   {
-    infoHint.username = '用户名格式有误';
+    infoHint.username = usernameLimit.msg;
     isVerify = false
   }
   if(!isPasswordValid(password))
   {
-    infoHint.password = '密码格式有误';
+    infoHint.password = passwordLimit.msg;
     isVerify = false
   }
   if(!isEmailValid(email))
   {
-    infoHint.email = '邮箱长度异常';
+    infoHint.email = emailLimit.msg;
     isVerify = false
   }
   if(!isNameValid(name))
   {
-    infoHint.name = '姓名长度异常';
+    infoHint.name = nameLimit.msg;
     isVerify = false
   }
   if(!isTelephoneValid(telephone))
   {
-    infoHint.telephone = '手机号长度异常';
+    infoHint.telephone = telephoneLimit.msg;
     isVerify = false
   }
 

@@ -1,35 +1,37 @@
 // 全局输入验证
 const LIMIT = {
-  UsernameMaxLength:16,
-  UsernameMinLength:4,
+  usernameLimit:{
+    pattern:/^[A-Za-z0-9]{4,16}$/,
+    msg:'只能输入字母或数字，4-16个'
+  },
+  passwordLimit:{
+    pattern:/^[A-Za-z0-9]{6,12}$/,
+    msg:'只能输入字母或数字，6-12个'
+  },
+  emailLimit:{
+    pattern:/^\w+([.-]?\w+)*@\w+([.-]?\w+)*\.\w{2,}$/,
+    msg:'请输入规范邮箱地址'
+  },
+  nameLimit:{
+    pattern:/^\S{2,50}$/,
+    msg:'不能包含空格，2-50个字'
+  },
+  telephoneLimit:{
+    pattern:/^1[3-9]\d{9}$/,
+    msg:'输入规范的中国大陆11位手机号'
+  }
+} as const;
 
-  PasswordMaxLength:16,
-  PasswordMinLength:6,
 
-  EmailMaxLength:30,
-  EmailMinLength:5,
+const isUsernameValid = (username:string)=> LIMIT.usernameLimit.pattern.test(username);
 
-  NameMaxLength:50,
-  NameMinLength:2,
+const isPasswordValid = (password:string)=> LIMIT.passwordLimit.pattern.test(password);
 
-  TelephoneMaxLength:11,
-  TelephoneMinLength:11
-} as const
+const isEmailValid = (email:string) => LIMIT.emailLimit.pattern.test(email);
 
-const isUsernameValid = (username:string)=>
-  username.length >= LIMIT.UsernameMinLength && username.length <= LIMIT.UsernameMaxLength;
+const isNameValid = (name:string) => LIMIT.nameLimit.pattern.test(name);
 
-const isPasswordValid = (password:string)=>
-  password.length >= LIMIT.PasswordMinLength && password.length <= LIMIT.PasswordMaxLength;
-
-const isEmailValid = (email:string) =>
-  email.length >= LIMIT.EmailMinLength && email.length <= LIMIT.EmailMaxLength
-
-const isNameValid = (name:string) =>
-  name.length >= LIMIT.NameMinLength && name.length <= LIMIT.NameMaxLength
-
-const isTelephoneValid = (telephone:string) =>
-  telephone.length >= LIMIT.TelephoneMinLength && telephone.length <= LIMIT.TelephoneMaxLength;
+const isTelephoneValid = (telephone:string) => LIMIT.telephoneLimit.pattern.test(telephone);
 
 export default{
   LIMIT,

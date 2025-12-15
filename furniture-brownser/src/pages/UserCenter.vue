@@ -17,12 +17,12 @@
 
           <div class="info-list" >
             <p class="base-info-item">用户：</p>
-            <input type="text" class="info-input"  v-model="showData.username"/>
+            <input type="text" class="info-input" :placeholder="usernameLimit.msg" v-model="showData.username"/>
           </div>
           <hr class="item-split" />
           <div class="info-list">
             <p class="base-info-item">姓名：</p>
-            <input type="text" class="info-input"  v-model="showData.name">
+            <input type="text" class="info-input" :placeholder="nameLimit.msg" v-model="showData.name">
           </div>
           <hr class="item-split" />
           <div class="info-list">
@@ -35,12 +35,12 @@
           <hr class="item-split" />
           <div class="info-list">
             <p class="base-info-item">邮箱：</p>
-            <input type="text" class="info-input" v-model="showData.email">
+            <input type="text" class="info-input" :placeholder="emailLimit.msg" v-model="showData.email">
           </div>
           <hr class="item-split" />
           <div class="info-list">
             <p class="base-info-item">手机：</p>
-            <input type="text" class="info-input" v-model="showData.telephone">
+            <input type="text" class="info-input" :placeholder="telephoneLimit.msg" v-model="showData.telephone">
           </div>
           <hr class="item-split" />
           <div class="info-list">
@@ -75,8 +75,10 @@ import Carousel from '@/components/Carousel.vue';
 const user = userStore();
 const userData = storeToRefs(user);
 
+const {usernameLimit,passwordLimit,emailLimit,nameLimit,telephoneLimit} = userVerify.LIMIT;
+
 //得到一个用户数据副本
-const showData = ref<LoginResponse>(JSON.parse(JSON.stringify(userData.userInfo.value)));
+let showData = ref<LoginResponse>(JSON.parse(JSON.stringify(userData.userInfo.value)));
 
 //退出登录
 const exit = ()=>{
@@ -92,24 +94,28 @@ const modifyInfo = async ()=>{
   const {isUsernameValid,isNameValid,isEmailValid,isTelephoneValid} = userVerify;
 
   if(!isUsernameValid(username!)){
-    toastStore().show("用户名字数不规范");
+    toastStore().show("用户名"+usernameLimit.msg);
     return;
   }
   if(!isNameValid(name!)){
-    toastStore().show("姓名字数不规范");
+    toastStore().show("姓名"+passwordLimit.msg);
     return;
   }
   if(!isEmailValid(email!)){
-    toastStore().show("邮箱字数不规范");
+    toastStore().show(emailLimit.msg);
     return;
   }
   if(!isTelephoneValid(telephone!)){
-    toastStore().show("电话号码字数不规范");
+    toastStore().show(telephoneLimit.msg);
     return;
   }
 
   const result = await user.modifyInfoAction(showData.value);
-  if(result) Object.assign(user.userInfo,showData.value);
+  if(result)
+  {
+    Object.assign(user.userInfo,showData.value);
+    showData.value = JSON.parse(JSON.stringify(userData.userInfo.value));
+  }
 }
 
 //如果用户修改了信息则显示提交修改按钮
@@ -118,7 +124,7 @@ watch(showData,()=>{
     isEditMode.value = false;
   }
   else{
-    isEditMode.value = true
+    isEditMode.value = true;
   }
 
 },{deep:true})
