@@ -45,7 +45,7 @@ defineExpose({
 .dialog-main{
     width: 480px;
     height: 480px;
-    margin: 100px auto;
+    margin:12% auto;
     background-color: #ddd;
     box-shadow: 0px 10px 10px 10px #666;
 }
@@ -72,10 +72,13 @@ defineExpose({
 @media (max-width: 768px) {
     .dialog-main{
         width: 300px;
-        margin-top: 20%;
+        height: 50%;
+        margin-top: 50%;
+        /* transform: translate(0,-50%); */
     }
     .dialog-detail{
       height: auto;
     }
 }
+
 </style>
