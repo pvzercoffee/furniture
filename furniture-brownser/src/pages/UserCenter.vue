@@ -1,6 +1,5 @@
 <template>
   <div class="page-user">
-    <Carousel />
       <h1 class="path">首页>>个人中心</h1>
       <h2 class="title-big">个人中心</h2>
       <hr class="color-hr">

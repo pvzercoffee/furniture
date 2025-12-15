@@ -7,6 +7,31 @@ import { toastStore } from "./toastStore";
 import { queryMessage } from "@/api/queryMessage.api";
 import { getPassTime } from "@/utils/getPassTime";
 import { deleteMessage } from "@/api/deleteMessage.api";
+import type { ResultInfo } from "@/interface/ResultInfo";
+import { queryMessageByUsername } from "@/api/queryMessageByUsername";
+
+//获取评论后解析与封装到state
+const pushMessage = (res:any)=>{
+  try{
+
+      const {messages,total}:{messages:MessageResponse[],total:number} = res;
+      //转换日期
+      messages.forEach((element:MessageResponse,index:number)=>{
+        if(messages[index]?.createTime){
+          messages[index]!.createTime = getPassTime(new Date(element.createTime)) || element.createTime
+        }
+      });
+
+      const msgs = messageStore();
+      msgs.messageTotal = total;
+      msgs.messageList.push(...messages);
+      msgs.update++;
+      return msgs.messageList;
+  }catch(e){
+    if(e instanceof Error && e.message) toastStore().show('登录后才能留言'+e.message)
+    return [];
+  }
+}
 
 export const messageStore = defineStore('useMessageStore',{
 
@@ -31,33 +56,29 @@ export const messageStore = defineStore('useMessageStore',{
 
     //查询留言
     async queryMessageAction(page:number){
-      try{
-        const res = await queryMessage(page);
-        const {messages,total}:{messages:MessageResponse[],total:number} = res;
 
-        //转换日期
-        messages.forEach((element:MessageResponse,index:number)=>{
-          if(messages[index]?.createTime){
-            messages[index]!.createTime = getPassTime(new Date(element.createTime)) || element.createTime
-          }
-        });
+      const res = await queryMessage(page);
+      return pushMessage(res);
 
-        this.messageTotal = total;
-        this.messageList.push(...messages);
-        this.update++;
+    },
 
-
-        return this.messageList;
-      }catch(e){
-        if(e instanceof Error && e.message) toastStore().show('登录后才能留言'+e.message)
-        return [];
-      }
+    //根据id查询留言
+    async queryMessageByusernameAction(username:string,page:number){
+      const res = await queryMessageByUsername(username,page);
+      return pushMessage(res);
     },
 
     //删除留言
     async deleteMessageAction(message_id:number){
       const result = await deleteMessage(message_id);
       return result;
+    },
+
+    //清空留言
+    cleanMessageAction(){
+      this.messageTotal = 0;
+      this.page = 1;
+      this.messageList = [];
     }
   },
 

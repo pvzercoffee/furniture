@@ -159,10 +159,8 @@ const submit = async  ()=>{
   await msg.addMessageAction(submitInfo);
   toast.show("留言发表成功");
   //加载留言列表
-  msg.page = 1;
-  msg.messageList = [];
+  msg.cleanMessageAction();
   await msg.queryMessageAction(msg.page);
-  msg.update++;
 
   //发表后清除表单
   submitInfo.email = submitInfo.name = submitInfo.telephone = submitInfo.text = '';

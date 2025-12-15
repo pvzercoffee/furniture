@@ -1,6 +1,7 @@
 package com.pvzer.furniture.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pvzer.furniture.mapper.MessageMapper;
 import com.pvzer.furniture.pojo.Message;
 import com.pvzer.furniture.pojo.MessageInfo;
@@ -36,24 +37,15 @@ public class MessageServiceImpl implements MessageService {
 
     //公共方法，通过查询到的留言返回获取total和，和每条留言的item，并封装好结果
     public Map<String,Object> queryResult(List<MessageInfo> messageList){
-
         //获取每条留言的item
         for(MessageInfo msg : messageList){
-
             //Message没有的属性通过子查询连接涉及的表
             List<String> itemList = messageMapper.queryItems(msg.getId());
             //遍历新的信息，封装进messageInfo
-
             msg.setItemList(itemList);
-
         }
-
-        //查询总记录数
-        Integer total = messageMapper.queryNum();
-
-        //把总记录数和留言列表组装到map一并发出
+        //把留言列表组装到map一并发出
         Map<String,Object> result = new HashMap<>();
-        result.put("total", total);
         result.put("messages",messageList);
 
         return result;
@@ -65,8 +57,13 @@ public class MessageServiceImpl implements MessageService {
         PageHelper.startPage(page,pageSize);
         //查出留言列表
         List<MessageInfo> messageList = messageMapper.queryAll();
+        PageInfo<MessageInfo> pageInfo = new PageInfo<>(messageList);
 
-        return queryResult(messageList);
+        Map<String,Object> result =  queryResult(messageList);
+        result.put("total",pageInfo.getTotal());
+        System.out.println("总记录数："+pageInfo.getTotal());
+
+        return result;
     }
 
     //查出指定用户的留言的业务
@@ -76,8 +73,12 @@ public class MessageServiceImpl implements MessageService {
         PageHelper.startPage(page,pageSize);
         //查出留言列表
         List<MessageInfo> messageList = messageMapper.queryByUsername(username);
+        PageInfo<MessageInfo> pageInfo = new PageInfo<>(messageList);
 
-        return queryResult(messageList);
+        Map<String,Object> result =  queryResult(messageList);
+        result.put("total",pageInfo.getTotal());
+
+        return result;
     }
 
     //删除留言业务,返回删除的id
@@ -97,8 +98,5 @@ public class MessageServiceImpl implements MessageService {
     public List<Map<Integer,String>> queryItem() {
         return messageMapper.queryItem();
     }
-
-
-
 
 }

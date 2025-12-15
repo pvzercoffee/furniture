@@ -2,17 +2,22 @@
   <div class="showMessage" v-show="userStore().isLogin">
     <div class="container">
       <div class="top">
-        <p class="title">共有{{ messages.messageTotal }} 条留言</p>
+        <p class="title">共有{{ msgs.messageTotal > 0 ? msgs.messageTotal : '...' }} 条留言</p>
         <select class="top-select" v-model="messageSelection">
           <option value="all">全部留言</option>
           <option value="self">只看我的</option>
         </select>
       </div>
-      <div :key="messages.update">
-        <MessageBody v-for="value in messages.messageList" :key="value.id"  :data="value"/>
+      <div :key="msgs.update">
+        <MessageBody v-for="value in msgs.messageList" :key="value.id"  :data="value"/>
       </div>
 
-      <button type="button" class="view-button" :key="messages.update" :disabled="acceptRefresh" @click="showMoreMessage">{{ remainMessage >= 1 ? `查看剩余${remainMessage}条留言` : '留言全部加载完毕' }}</button>
+      <button type="button" class="view-button"
+        :key="msgs.update"
+        :disabled="acceptRefresh"
+        @click="showMoreMessage">{{ remainMessage >= 1 ? `查看剩余${remainMessage}条留言` : '留言全部加载完毕' }}
+
+      </button>
       </div>
   </div>
 
@@ -25,20 +30,23 @@ import { userStore } from '@/store/userStore';
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import MessageBody from './MessageBody.vue';
 
-let messages = messageStore();
+
+const msgs = messageStore();
+const users = userStore();
+
 let acceptRefresh = ref(false);
 
 //计算剩余未加载的留言数
 const remainMessage = computed(()=>{
-  return messages.messageTotal- messages.messageList.length;
+  return msgs.messageTotal- msgs.messageList.length;
 });
 
 //加载留言
 const showMoreMessage = async ()=>{
   acceptRefresh.value = true;
   if(remainMessage.value >= 1){
-    messages.page++;
-    await messageStore().queryMessageAction(messages.page)
+    msgs.page++;
+    await messageStore().queryMessageAction(msgs.page)
   }
   acceptRefresh.value = false;
 }
@@ -46,28 +54,37 @@ const showMoreMessage = async ()=>{
 //登录后立即加载留言
 watch(()=>userStore().userInfo.token,(token)=>{
     if(token){
-      messageStore().queryMessageAction(messages.page)
+      messageStore().queryMessageAction(msgs.page)
     }
 })
 
 onMounted(()=>{
-  if(userStore().userInfo.token) messageStore().queryMessageAction(messages.page);
+  if(userStore().userInfo.token) messageStore().queryMessageAction(msgs.page);
 });
 
-//卸载组件时还原评论
+//卸载组件时清除评论
 onUnmounted(()=>{
-  messages.messageTotal = 0;
-  messages.page = 1;
-  messages.messageList = [];
+  msgs.cleanMessageAction();
 });
 
 //
-
 const selection = {
   self:'self',
   all:'all'
 }
-let messageSelection = ref(selection.self);
+let messageSelection = ref(selection.all);
+
+watch(messageSelection,(v)=>{
+
+  msgs.cleanMessageAction();
+
+  if(v === selection.all){
+    messageStore().queryMessageAction(msgs.page)
+  }
+  else if(v === selection.self){
+    messageStore().queryMessageByusernameAction(users.userInfo.username!,msgs.page);
+  }
+})
 </script>
 
 <style scoped>

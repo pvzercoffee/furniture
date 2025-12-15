@@ -5,8 +5,8 @@ import { userStore } from "@/store/userStore";
 import axios from "axios";
 
 
-export const queryMessage = async (username:string,page:number)=>{
-  const result = await axios.get(`${API_URL}/api/message/${username}/?&page=${page}&pageSize=${messageStore().pageSize}`,{
+export const queryMessageByUsername = async (username:string,page:number)=>{
+  const result = await axios.get(`${API_URL}/api/message/${username}?&page=${page}&pageSize=${messageStore().pageSize}`,{
     headers:{
       token:userStore().userInfo.token
     }

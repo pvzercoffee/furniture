@@ -11,6 +11,7 @@ import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -20,18 +21,19 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(10);
     }
 
+    //解决跨域问题
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // 允许所有来源（开发环境）
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(List.of("*"));
 
         // 允许的请求方法
-        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedMethods(List.of("*"));
 
         // 允许的请求头
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
