@@ -11,4 +11,5 @@ public interface UserService {
     LoginInfo login(User user);
     LoginInfo me(String token);
     void modify(User user);
+    void destroy();
 }

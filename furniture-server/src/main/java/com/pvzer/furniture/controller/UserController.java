@@ -14,12 +14,14 @@ public class UserController {
     @Autowired
     UserServiceImpl userServiceImpl;
 
+    //注册
     @PostMapping("/signup")
     public Result signup(@RequestBody User user){
         userServiceImpl.signup(user);
         return Result.success();
     }
 
+    //登录
     @PostMapping("/login")
     public Result login(@RequestBody User user){
         LoginInfo data = userServiceImpl.login(user);
@@ -38,5 +40,12 @@ public class UserController {
     public Result modify(@RequestBody User modifyUser){
         userServiceImpl.modify(modifyUser);
         return Result.success("修改成功",null);
+    }
+
+    //账号注销
+    @DeleteMapping("/user")
+    public Result destroy(){
+        userServiceImpl.destroy();
+        return Result.success();
     }
 }

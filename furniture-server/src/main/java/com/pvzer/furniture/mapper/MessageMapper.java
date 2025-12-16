@@ -24,6 +24,10 @@ public interface MessageMapper {
     //查询指定用户的留言内容
     List<MessageInfo> queryByUsername(String username);
 
+    //查询指定id发布的留言id
+    @Select("select m.id from messages m where m.user_id = #{id}")
+    List<Integer> queryIdByUserId(Integer id);
+
     //查询单条留言的item名
     List<String> queryItems(Integer messageId);
 
@@ -34,6 +38,13 @@ public interface MessageMapper {
     //删除留言多表关系
     @Delete("delete from message_items_link where message_id = #{messageId} ")
     Integer deleteLink(Integer messageId);
+
+    //注销指定用户的多表关系
+    void destroyMessageItemsLink(List<Integer> messageIdList);
+
+    //清空指定用户的所有留言
+    @Delete("delete from messages where user_id = #{userId}")
+    void destroyMessageById(Integer userId);
 
     //查询可用留言项目
     @Select("select id,name from items order by id")

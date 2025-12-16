@@ -48,4 +48,13 @@
             left join users on users.id = msgs.user_id where link.message_id = #{messageId};
     </select>
 
+    <delete id="destroyMessageItemsLink">
+        delete from message_items_link where message_id in(
+            <foreach collection="messageIdList" item="id" separator=",">
+                #{id}
+            </foreach>
+        )
+    </delete>
+
+
 </mapper>

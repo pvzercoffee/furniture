@@ -26,15 +26,15 @@ public class GolbalExceptionHandler {
 
         List<ExceptionContext> exceptionSet = new LinkedList<>();
 
-        exceptionSet.add(new ExceptionContext("username","这个用户名已经被使用了，换一个吧"));
-        exceptionSet.add(new ExceptionContext("email", "该邮箱已被注册"));
-        exceptionSet.add(new ExceptionContext("telephone", "手机号已被注册"));
+        exceptionSet.add(new ExceptionContext("for key 'username'","这个用户名已经被使用了，换一个吧"));
+        exceptionSet.add(new ExceptionContext("for key 'email'", "该邮箱已被注册"));
+        exceptionSet.add(new ExceptionContext("for key 'telephone'", "手机号已被注册"));
         exceptionSet.add(new ExceptionContext("because \"result\" is null", "用户名或密码错误"));
         exceptionSet.add(new ExceptionContext("删除失败", "删除失败"));
 
         for(ExceptionContext context : exceptionSet){
             if(e.getMessage().contains(context.getError())){
-                System.out.println("来自全局异常的输出："+context.getResult());
+                System.out.println("来自全局异常的输出："+e.getMessage());
                 return Result.error(context.getResult());
             }
         }
@@ -50,5 +50,10 @@ public class GolbalExceptionHandler {
     @ExceptionHandler(JwtException.class)
     public Result handlerJwtParseException(){
         return Result.error("登录信息已过期，请重新登录");
+    }
+
+    @ExceptionHandler(IdentityMismatchException.class)
+    public Result handlerIdentityMismatchException(){
+        return Result.error("身份信息不一致");
     }
 }

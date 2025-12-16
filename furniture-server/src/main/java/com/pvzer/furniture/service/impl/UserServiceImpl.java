@@ -4,6 +4,7 @@ package com.pvzer.furniture.service.impl;
 import com.pvzer.furniture.config.SecurityConfig;
 import com.pvzer.furniture.exception.JwtParseException;
 import com.pvzer.furniture.exception.SelectErrorException;
+import com.pvzer.furniture.mapper.MessageMapper;
 import com.pvzer.furniture.mapper.UserMapper;
 import com.pvzer.furniture.pojo.LoginInfo;
 import com.pvzer.furniture.pojo.User;
@@ -15,18 +16,25 @@ import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Autowired
-    SecurityConfig securityConfig;
+    private MessageMapper messageMapper;
+
+    @Autowired
+    private SecurityConfig securityConfig;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -48,7 +56,7 @@ public class UserServiceImpl implements UserService {
         System.out.println(securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()));
 
         //密码错误抛异常
-        if(result == null || !securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()))
+        if(!securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()))
         {
             throw new SelectErrorException();
         }
@@ -82,7 +90,6 @@ public class UserServiceImpl implements UserService {
         Integer id = (Integer) claims.get("id");
 
         return userMapper.me(id);
-
     }
 
     //修改信息业务
@@ -97,5 +104,19 @@ public class UserServiceImpl implements UserService {
         }
 
         userMapper.modify(user);
+    }
+
+    //账号注销业务
+    @Override
+    @Transactional
+    public void destroy() {
+        Integer id = CurrentHolder.getCurrentId();
+        List<Integer> messageIdList = messageMapper.queryIdByUserId(id);
+        if(!messageIdList.isEmpty()){
+
+            messageMapper.destroyMessageItemsLink(messageIdList);
+            messageMapper.destroyMessageById(id);
+        }
+        userMapper.destroyById(id);
     }
 }
