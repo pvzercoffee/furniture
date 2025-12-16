@@ -3,7 +3,7 @@
     <div class="container">
       <div class="top">
         <p class="title">共有{{ msgs.messageTotal > 0 ? msgs.messageTotal : '...' }} 条留言</p>
-        <select class="top-select" v-model="messageSelection">
+        <select class="top-select" v-model="msgs.messageSelection">
           <option value="all">全部留言</option>
           <option value="self">只看我的</option>
         </select>
@@ -29,6 +29,7 @@ import { messageStore } from '@/store/messageStore';
 import { userStore } from '@/store/userStore';
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import MessageBody from './MessageBody.vue';
+import { selection } from '@/constants/messageSelection';
 
 
 const msgs = messageStore();
@@ -67,24 +68,12 @@ onUnmounted(()=>{
   msgs.cleanMessageAction();
 });
 
-//
-const selection = {
-  self:'self',
-  all:'all'
-}
-let messageSelection = ref(selection.all);
-
-watch(messageSelection,(v)=>{
-
+watch(()=>msgs.messageSelection,(v)=>{
   msgs.cleanMessageAction();
-
-  if(v === selection.all){
-    messageStore().queryMessageAction(msgs.page)
-  }
-  else if(v === selection.self){
-    messageStore().queryMessageByusernameAction(users.userInfo.username!,msgs.page);
-  }
+  messageStore().queryMessageAction(msgs.page)
 })
+
+
 </script>
 
 <style scoped>

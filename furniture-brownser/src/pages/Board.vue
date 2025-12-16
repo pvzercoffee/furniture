@@ -152,6 +152,7 @@ const submit = async  ()=>{
   //arr.filter(item=>bool)：剔除所有不符合bool的元素
   //arr.map(item=>bool)：返回一个属性组成的新arr
 
+  //获取选择的item，再提取出id用于提交
   submitInfo.itemList = itemList
     .filter(item => item.status)
     .map(item=>item.id);

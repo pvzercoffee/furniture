@@ -8,6 +8,9 @@ import { queryMessage } from "@/api/queryMessage.api";
 import { getPassTime } from "@/utils/getPassTime";
 import { deleteMessage } from "@/api/deleteMessage.api";
 import { queryMessageByUsername } from "@/api/queryMessageByUsername";
+import { selection } from "@/constants/messageSelection";
+import type { ResultInfo } from "@/interface/ResultInfo";
+import { userStore } from "./userStore";
 
 //获取评论后解析与封装到state
 const pushMessage = (res:any)=>{
@@ -59,7 +62,16 @@ export const messageStore = defineStore('useMessageStore',{
     //查询留言
     async queryMessageAction(page:number){
 
-      const res = await queryMessage(page);
+      let res:any;
+      if(this.messageSelection === selection.self){
+        const {userInfo} = userStore();
+        res = await queryMessageByUsername(userInfo.username!,page);
+        console.log(this.messageSelection);
+      }
+      else{
+        res = await queryMessage(page);
+        console.log(this.messageSelection);
+      }
       return pushMessage(res);
 
     },
@@ -91,7 +103,8 @@ export const messageStore = defineStore('useMessageStore',{
       messageTotal:0,
       page:1,
       pageSize : 10,
-      update:0
+      update:0,
+      messageSelection : selection.all
     }
   }
 });

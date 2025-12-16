@@ -24,10 +24,6 @@ public interface MessageMapper {
     //查询指定用户的留言内容
     List<MessageInfo> queryByUsername(String username);
 
-    //查询留言条目数
-    @Select("select count(id) from messages")
-    Integer queryNum();
-
     //查询单条留言的item名
     List<String> queryItems(Integer messageId);
 

@@ -141,8 +141,9 @@ onUnmounted(() => {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 70px;
+  padding: 20px 20px 20px 40px;
   z-index: 1000;
+  margin-right: 15px;
 }
 
 .hamburger {

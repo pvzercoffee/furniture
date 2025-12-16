@@ -91,7 +91,7 @@
   }
   .base-info{
     width: 280px;
-    margin: 0;
+    /* margin: 0; */
     padding: 0 40px 0 0 ;
   }
 }
