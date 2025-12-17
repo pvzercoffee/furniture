@@ -5,10 +5,13 @@ D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furnit
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\controller\MessageController.java
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\controller\UserController.java
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\exception\GolbalExceptionHandler.java
+D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\exception\IdentityMismatchException.java
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\exception\JwtParseException.java
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\exception\SelectErrorException.java
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\FurnitureApplication.java
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\interceptor\TokenInterceptor.java
+D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\mapper\ItemsMapper.java
+D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\mapper\MessageItemsLink.java
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\mapper\MessageMapper.java
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\mapper\UserMapper.java
 D:\projects\intergated\furniture\furniture-server\src\main\java\com\pvzer\furniture\pojo\Item.java

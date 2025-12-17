@@ -1,5 +1,6 @@
 .navbar {
-
+  position: fixed;
+  top: 30px;
   background-color:rgb(253, 235, 216);
   padding: 0 20px;
   height: 70px;
@@ -190,10 +191,7 @@
     height: 100px;
     width: 100%;
   }
-  .navbar{
-    position: fixed;
-    top: 30px;
-  }
+
 }
 
 @media (min-width: 769px) {

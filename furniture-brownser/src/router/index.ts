@@ -59,7 +59,17 @@ const router = createRouter({
             redirect:"/home",
             path:"/"
         }
-    ]
+    ],
+    scrollBehavior(to,from,savedPosition){
+      //如果浏览器的前进/后退按钮有保存位置，优先滚动到保存位置
+      if(savedPosition){
+        return savedPosition;
+      }
+      else{
+        //每次路由切换，滚动到顶部
+        return {left:0,top:0}
+      }
+    }
 });
 
 export default router

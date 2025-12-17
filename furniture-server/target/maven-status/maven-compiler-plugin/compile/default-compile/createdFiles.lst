@@ -2,7 +2,9 @@ com\pvzer\furniture\config\CorsConfig.class
 com\pvzer\furniture\anno\NoInterCepte.class
 com\pvzer\furniture\service\MessageService.class
 com\pvzer\furniture\FurnitureApplication.class
+com\pvzer\furniture\mapper\ItemsMapper.class
 com\pvzer\furniture\service\impl\MessageServiceImpl.class
+com\pvzer\furniture\exception\IdentityMismatchException.class
 com\pvzer\furniture\controller\MessageController.class
 com\pvzer\furniture\pojo\Message.class
 com\pvzer\furniture\pojo\Result.class
@@ -18,6 +20,7 @@ com\pvzer\furniture\service\UserService.class
 com\pvzer\furniture\controller\UserController.class
 com\pvzer\furniture\pojo\Item.class
 com\pvzer\furniture\interceptor\TokenInterceptor.class
+com\pvzer\furniture\mapper\MessageItemsLink.class
 com\pvzer\furniture\exception\SelectErrorException.class
 com\pvzer\furniture\config\WebConfig.class
 com\pvzer\furniture\mapper\MessageMapper.class

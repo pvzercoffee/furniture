@@ -41,6 +41,9 @@ logined((loginInfo:any)=>{
     line-height: 30px;
     height: 30px;
     z-index: 999;
+    position: fixed;
+    left: 0;
+    top: 0;
     overflow: hidden;
     width: 100%;
     background-color: aqua;
@@ -70,11 +73,5 @@ header>.icon{
 .icon_email{
     background-position: 0 -73px;
 }
-@media(max-width:768px){
-  .main-header{
-    position: fixed;
-    left: 0;
-    top: 0;
-  }
-}
+
 </style>
