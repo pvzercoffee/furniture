@@ -4,6 +4,7 @@ package com.pvzer.furniture.service.impl;
 import com.pvzer.furniture.config.SecurityConfig;
 import com.pvzer.furniture.exception.JwtParseException;
 import com.pvzer.furniture.exception.SelectErrorException;
+import com.pvzer.furniture.mapper.MessageItemsLink;
 import com.pvzer.furniture.mapper.MessageMapper;
 import com.pvzer.furniture.mapper.UserMapper;
 import com.pvzer.furniture.pojo.LoginInfo;
@@ -31,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MessageMapper messageMapper;
+
+    @Autowired
+    private MessageItemsLink messageItemsLink;
 
     @Autowired
     private SecurityConfig securityConfig;
@@ -114,7 +118,7 @@ public class UserServiceImpl implements UserService {
         List<Integer> messageIdList = messageMapper.queryIdByUserId(id);
         if(!messageIdList.isEmpty()){
 
-            messageMapper.destroyMessageItemsLink(messageIdList);
+            messageItemsLink.destroyMessageItemsLink(messageIdList);
             messageMapper.destroyMessageById(id);
         }
         userMapper.destroyById(id);

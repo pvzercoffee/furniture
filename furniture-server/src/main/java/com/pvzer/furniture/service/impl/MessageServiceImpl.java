@@ -2,6 +2,8 @@ package com.pvzer.furniture.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.pvzer.furniture.mapper.ItemsMapper;
+import com.pvzer.furniture.mapper.MessageItemsLink;
 import com.pvzer.furniture.mapper.MessageMapper;
 import com.pvzer.furniture.pojo.Message;
 import com.pvzer.furniture.pojo.MessageInfo;
@@ -22,6 +24,11 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     MessageMapper messageMapper;
 
+    @Autowired
+    MessageItemsLink messageItemsLink;
+
+    @Autowired
+    ItemsMapper itemsMapper;
     //添加留言
     @Transactional
     @Override
@@ -32,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
         messageMapper.addToMessages(message);
         Integer messageId = message.getId();
         //动态sql以itemList为索引实现多对多关系插入到message_items_link
-        messageMapper.addToMessageItemsLink(messageId,message.getItemList());
+        messageItemsLink.addToMessageItemsLink(messageId,message.getItemList());
     }
 
     //公共方法，通过查询到的留言返回获取total和，和每条留言的item，并封装好结果
@@ -40,7 +47,7 @@ public class MessageServiceImpl implements MessageService {
         //获取每条留言的item
         for(MessageInfo msg : messageList){
             //Message没有的属性通过子查询连接涉及的表
-            List<String> itemList = messageMapper.queryItems(msg.getId());
+            List<String> itemList = messageItemsLink.queryItems(msg.getId());
             //遍历新的信息，封装进messageInfo
             msg.setItemList(itemList);
         }
@@ -85,7 +92,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     @Transactional
     public Integer delete(Integer id) {
-        messageMapper.deleteLink(id);
+        messageItemsLink.deleteLink(id);
         int rows = messageMapper.delete(id,CurrentHolder.getCurrentId());
         if(rows == 0){
             throw new RuntimeException("删除失败，找不到当前用户的这条留言");
@@ -96,7 +103,7 @@ public class MessageServiceImpl implements MessageService {
     //查询可用项目
     @Override
     public List<Map<Integer,String>> queryItem() {
-        return messageMapper.queryItem();
+        return itemsMapper.queryItem();
     }
 
 }

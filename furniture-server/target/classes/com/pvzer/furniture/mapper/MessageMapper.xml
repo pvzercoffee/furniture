@@ -3,14 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pvzer.furniture.mapper.MessageMapper">
-    <insert id="addToMessageItemsLink">
-        insert into message_items_link(message_id, item_id) values
-        <foreach collection="itemList" item="item" separator=",">
-            (#{messageId},#{item})
-        </foreach>
-    </insert>
 
-<!--    //查询全部留言-->
+    <!--查询全部留言-->
     <select id="queryAll">
         select
             msgs.id as id,
@@ -39,22 +33,5 @@
         where users.username = #{username}
         order by create_time desc
     </select>
-
-    <!--    根据留言id查出留言用户名和留言所有的item-->
-    <select id="queryItems" resultType="java.lang.String">
-        select items.name as item from message_items_link link
-            left join items on link.item_id = items.id
-            left join messages msgs on msgs.id = link.message_id
-            left join users on users.id = msgs.user_id where link.message_id = #{messageId};
-    </select>
-
-    <delete id="destroyMessageItemsLink">
-        delete from message_items_link where message_id in(
-            <foreach collection="messageIdList" item="id" separator=",">
-                #{id}
-            </foreach>
-        )
-    </delete>
-
 
 </mapper>
