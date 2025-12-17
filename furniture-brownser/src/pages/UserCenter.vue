@@ -75,7 +75,7 @@ import Carousel from '@/components/Carousel.vue';
 const user = userStore();
 const userData = storeToRefs(user);
 
-const {usernameLimit,passwordLimit,emailLimit,nameLimit,telephoneLimit} = userVerify.LIMIT;
+const {usernameLimit,emailLimit,nameLimit,telephoneLimit} = userVerify.LIMIT;
 
 //得到一个用户数据副本
 let showData = ref<LoginResponse>(JSON.parse(JSON.stringify(userData.userInfo.value)));
@@ -98,7 +98,7 @@ const modifyInfo = async ()=>{
     return;
   }
   if(!isNameValid(name!)){
-    toastStore().show("姓名"+passwordLimit.msg);
+    toastStore().show("姓名"+nameLimit.msg);
     return;
   }
   if(!isEmailValid(email!)){

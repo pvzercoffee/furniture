@@ -9,7 +9,10 @@
   z-index: 999;
   align-items: center;
 }
-
+.empty{
+  height: 100px;
+  width: 100%;
+}
 /* 移动端汉堡按钮 */
 .mobile-menu-btn {
   display: none;
@@ -187,11 +190,6 @@
   .navbar {
     justify-content: flex-end;
   }
-  .empty{
-    height: 100px;
-    width: 100%;
-  }
-
 }
 
 @media (min-width: 769px) {
