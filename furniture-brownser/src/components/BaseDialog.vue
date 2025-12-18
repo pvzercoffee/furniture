@@ -21,7 +21,7 @@ const props = defineProps<{
   }
 }>();
 
-const {name,img,price} = toRefs(props.message);
+const {name,img} = toRefs(props.message);
 
 let isShow = ref(false);
 

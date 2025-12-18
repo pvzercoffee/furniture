@@ -18,21 +18,21 @@
 </template>
 
 <script lang="ts" setup>
-import { logined } from '@/utils/logined';
-import { ref } from 'vue';
+import { userStore } from '@/store/userStore';
+import { ref, watch } from 'vue';
+
 let title = ref('欢迎来到精美家具');
+const users = userStore();
 
-
-logined((loginInfo:any)=>{
-  if(loginInfo.isLogin){
-    const {name,gender} = loginInfo.userInfo;
+watch(()=>users.userInfo.gender,(gender)=>{
+  if(users.isLogin){
+    const {name} = users.userInfo;
     title.value = name + (gender == 1 ? '先生' : '女士') + '，欢迎来到精美家居';
   }
   else{
     title.value = '欢迎来到精美家居';
   }
-});
-
+},{immediate:true});
 
 </script>
 

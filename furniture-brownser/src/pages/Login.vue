@@ -24,7 +24,7 @@
               </div>
 
               <div class="column">
-                <p class="form_hint" :style="{'color':hintColor}">&nbsp;{{ hint }}</p>
+                <p class="form_hint" :style="{'color':isVerify ? HintColors.legal : HintColors.illegal}">&nbsp;{{ hint }}</p>
               </div>
 
               <div class="column">
@@ -40,12 +40,11 @@
 
 import Carousel from '@/components/Carousel.vue';
 import { HintColors } from '@/constants/HintColors';
-import { ref, toRef, watch } from 'vue';
+import { ref, watch } from 'vue';
 import '@/styles/loginAndSignup.css'
 import { useRouter } from 'vue-router';
 import { userStore } from '@/store/userStore';
 import { toastStore } from '@/store/toastStore';
-import { storeToRefs } from 'pinia';
 
 const InputLimit = {
   nameMaxLength : 16,
@@ -58,31 +57,28 @@ const {nameMaxLength,nameMinLength,pwdMaxLength,pwdMinLength} = InputLimit;
 
 let username = ref('');
 let password = ref('');
-let hint = ref('');
-let hintColor = ref(HintColors.normal)
-const useToastStore = toastStore();
+let hint = ref(''); //提示合法性文字
+let isVerify = ref(false);  //用户输合法性
 
-const user = userStore();
-const userData = storeToRefs(user);
+const toast = toastStore();
+const users = userStore();
 
 //登录函数
-async function login(){
+ const login = async ()=>{
   if(!inputVerify()) return;
 
   //把用户名密码传给store去提交
-  await user.loginAction(username.value,password.value);
-  const {username:name} = user.userInfo;
-  useToastStore.show("登录成功！欢迎回来，"+name);
+  await users.loginAction(username.value,password.value);
+  const {username:name} = users.userInfo;
+  toast.show("登录成功！欢迎回来，"+name);
 
 }
 
 //输入验证函数
-function inputVerify():boolean{
+function inputVerify(){
 
   const nameLength = username.value.length;
   const pwdLength = password.value.length;
-
-  let isVerify = false;
 
   if(nameLength < nameMinLength) hint.value = '用户名过短';
   else if(nameLength > nameMaxLength) hint.value = '用户名过长';
@@ -90,35 +86,28 @@ function inputVerify():boolean{
   else if(pwdLength > pwdMaxLength) hint.value = '密码过长';
   else
   {
-    isVerify = true;
+    isVerify.value = true;
     hint.value = '输入合法';
   }
-
-  hintColor.value = isVerify ? HintColors.legal : HintColors.illegal;
-
-  return isVerify;
+  return isVerify.value;
 }
 const router = useRouter();
 
 //注册按钮跳转到注册页
-function signup(){
+const signup=()=>{
   router.replace({
     name:'signup'
   });
 }
 
 //监听登录状态，若已登录则跳到个人中心
-watch(userData.isLogin,()=>{
-  if(userData.isLogin.value){
+watch(()=>users.isLogin,()=>{
+  if(users.isLogin){
     router.replace({
       name:'user'
     });
   }
-},
-{
-  //首次加载也要判断
-  immediate:true
-}
+},{immediate:true}
 );
 
 </script>

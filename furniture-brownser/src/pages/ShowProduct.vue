@@ -28,6 +28,7 @@ import { productList } from '@/constants/productData';
 
 const {getImageUrl} = resourceTool;
 
+//弹窗数据初始化
 let dialogMessage:ProductInfo = reactive({
   id:'',
   name:'',
@@ -35,14 +36,14 @@ let dialogMessage:ProductInfo = reactive({
   price:0
 })
 
-let dialog = ref();
+let dialog = ref(); //ref接收dialog组件提供的控制函数
 
 function showDetail(value:ProductInfo){
 
   dialogMessage.name = value.name
   //类型守卫：a = b === 'string' ? b : ''
   //类型断言 a = b as string
-  dialogMessage.img = getImageUrl(value.img);
+  dialogMessage.img = getImageUrl('photos/'+value.img);
   dialogMessage.price = value.price
 
   dialog.value.show();

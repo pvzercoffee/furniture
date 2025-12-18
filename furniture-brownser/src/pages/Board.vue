@@ -33,7 +33,11 @@
                       </span>
 
                       <h4 class="font-text"style="margin-top: 60px;">咨询内容<span class="redstar">*</span></h4>
-                      <p class="font-text" id="word_count" :style="{'color':hintColor}">{{ hint }}</p>
+                      <p class="font-text"
+                         id="word_count"
+                         :style="{'color':inputableNumber >= 0 ? HintColors.legal : HintColors.illegal}">
+                         {{ inputableNumber >= 0 ? `您还可以输入${inputableNumber}个字` : `您已超出${-inputableNumber}个字` }}
+                      </p>
                       <textarea id="msg_area" required v-model="submitInfo.text"></textarea>
                       <br>
                       <input type="button" value="提交" @click="submit">
@@ -55,17 +59,13 @@ import { messageStore } from '@/store/messageStore';
 import { toastStore } from '@/store/toastStore';
 import { userStore } from '@/store/userStore';
 import '@/styles/board.css'
-import { storeToRefs } from 'pinia';
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 
-let messageKey = ref(0)
+const msgs = messageStore();  //留言数据store
 
-const msg = messageStore();
+let toast = toastStore();   //消息提示
 
-//控制留言更新
-watch(()=>msg.update,()=>{
-  messageKey.value++;
-});
+const maxInput = 150; //留言板正文最大允许输入字数
 
 //提交给后端的信息
 let submitInfo = reactive({
@@ -76,45 +76,21 @@ let submitInfo = reactive({
     itemList:<number[]>[]
 });
 
-//消息提示
-let toast = toastStore();
-
 //watch监测全选按钮，实现全反选
 const isSelectAll = ref(false);
-
 watch(isSelectAll,()=>{
-messageStore().itemList.forEach((value,index)=>{
+msgs.itemList.forEach((value,index)=>{
   value.status = isSelectAll.value;
 });
 })
 
+
+let hintColor = ref(HintColors.normal)  //提示的颜色（正常/超过字数）
+
 //computed响应式计算还能写几个字
-const maxInput = 100;
-let hintColor = ref(HintColors.normal)
+const inputableNumber = computed(()=> maxInput - submitInfo.text.length);
 
-let hint = ref(`你还能输入${maxInput}个字`);
-
-const words = computed(()=>{
-return maxInput - submitInfo.text.length;
-});
-
-//渲染字数情况给页面
-watch(words,()=>{
-if(words.value < 0)
-{
-  hint.value = `您已超出${-words.value}个字`
-  hintColor.value = HintColors.illegal
-  return;
-}
-
-hint.value = `您还可以输入${words.value}个字`
-hintColor.value = HintColors.legal
-
-});
-
-
-let mainForm = ref<HTMLFormElement|null>(null);
-
+let mainForm = ref<HTMLFormElement|null>(null); //html表单对象，用于原生输入验证和提示补全
 //表单验证
 const verify = ()=>{
 
@@ -129,7 +105,7 @@ const verify = ()=>{
     toast.show("请填写完整信息");
     return false;
   }
-  if(words.value < 0){
+  if(inputableNumber.value < 0){
     toast.show("超过允许字数");
     return false;
   }
@@ -147,7 +123,7 @@ const submit = async  ()=>{
 
   if(!verify()) return;
 
-  const {itemList} = msg;
+  const {itemList} = msgs;
 
   //arr.filter(item=>bool)：剔除所有不符合bool的元素
   //arr.map(item=>bool)：返回一个属性组成的新arr
@@ -157,11 +133,11 @@ const submit = async  ()=>{
     .filter(item => item.status)
     .map(item=>item.id);
 
-  await msg.addMessageAction(submitInfo);
+  await msgs.addMessageAction(submitInfo);
   toast.show("留言发表成功");
   //加载留言列表
-  msg.cleanMessageAction();
-  await msg.queryMessageAction(msg.page);
+  msgs.cleanMessageAction();
+  await msgs.queryMessageAction(msgs.page);
 
   //发表后清除表单
   submitInfo.email = submitInfo.name = submitInfo.telephone = submitInfo.text = '';
@@ -172,7 +148,6 @@ const submit = async  ()=>{
 //加载板块
 onMounted(()=>{
     messageStore().queryItemAction();
-
 });
 
 

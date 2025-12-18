@@ -5,35 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { useCountdown } from '@/composables/useCountdown';
 
-function parseText(time:number,now:number){
-
-  const calculation = time-now;
-  const s = calculation/1000;
-  const days = Math.floor(s/(60*60*24))
-  const hours = Math.floor((s % (60 * 60 * 24))/ (60 * 60))
-  const minutes = Math.floor((s % (60 * 60)) / 60)
-  const seconds = Math.floor(s % 60)
-
-  return  `${days}天${hours}时${minutes}分${seconds}秒`;
-}
-
-let timeout = ref('');
-const time = new Date('2026-12-12 00:00:00').getTime();
-let interval:any;
-
-onMounted(()=>{
-  interval = setInterval(()=>{
-
-  const now = new Date().getTime();
-    timeout.value = parseText(time,now);
-  },1000);
-});
-
-onBeforeMount(()=>{
-  clearInterval(interval);
-});
+let timeout = useCountdown('2026-12-12 00:00:00');
 
 </script>
 

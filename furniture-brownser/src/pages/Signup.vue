@@ -82,7 +82,7 @@ import '@/styles/loginAndSignup.css'
 import { userStore } from '@/store/userStore';
 import type { SignupInfo } from '@/interface/User';
 import userVerify from '@/utils/userVerify';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { toastStore } from '@/store/toastStore';
 
 
@@ -107,12 +107,13 @@ let infoHint = reactive({
 });
 const toast = toastStore();
 const router = useRouter();
+const users = userStore();
 
 const {usernameLimit,passwordLimit,emailLimit,nameLimit,telephoneLimit} = userVerify.LIMIT;
 
 async function submitSignup(){
   if(!inputVerify()) return;
-  const result = await userStore().signupAction(userInfo);
+  const result = await users.signupAction(userInfo);
 
   if(result.code == 1){
     toast.show("注册成功~请登录");

@@ -59,15 +59,18 @@ export const messageStore = defineStore('useMessageStore',{
     //查询留言
     async queryMessageAction(page:number){
 
-      let res = await queryMessage(page);
-      return pushMessage(res);
+      const res = await queryMessage(page);
+      pushMessage(res);
+      this.page++;
 
     },
 
     //根据id查询留言
     async queryMessageByusernameAction(username:string,page:number){
       const res = await queryMessageByUsername(username,page);
-      return pushMessage(res);
+      pushMessage(res);
+      this.page++;
+
     },
 
     //删除留言

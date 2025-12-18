@@ -13,7 +13,9 @@
   >
 
   <swiper-slide class="swiper-slide"
-  v-for="value in carouselList"  :key="value.id" :style="{'background-image':`url(${getResource(value.path)})`}">
+  v-for="value in carouselList"
+  :key="value.id"
+  :style="{'background-image':`url(${resourceTool.getImageUrl('images/'+value.path)})`}">
     {{ value.title }}
   </swiper-slide>
 
@@ -28,17 +30,8 @@
   import 'swiper/css/navigation';
   import 'swiper/css/pagination';
   import 'swiper/css/scrollbar';
+  import resourceTool from '@/utils/resourceTool'
 
-  const images = import.meta.glob('/src/images/*.jpg',{
-    eager:true,
-    query:'?url',
-    import:'default'
-  });
-
-  function getResource(filename:string)
-  {
-    return images[`/src/images/${filename}`]
-  }
 
   const carouselList:CarouselInfo[] = [
     {
@@ -72,8 +65,6 @@
     // console.log('slide change');
   };
   const modules = [Autoplay,Navigation, Pagination, Scrollbar,A11y]
-
-
 
 </script>
 

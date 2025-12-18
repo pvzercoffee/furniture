@@ -1,6 +1,6 @@
 <template>
 <div class="card">
-  <div class="good" :style="{backgroundImage:`url(${getImageUrl(img)})`}"></div>
+  <div class="good" :style="{backgroundImage:`url(${getImageUrl(`photos/${img}`)})`}"></div>
   <p class="good-text">￥{{ price }}</p>
   <p class="good-text">{{ name }}</p>
 </div>

@@ -3,7 +3,7 @@
     <div class="container">
       <div class="top">
         <p class="title">共有{{ msgs.messageTotal > 0 ? msgs.messageTotal : '...' }} 条留言</p>
-        <select class="top-select" v-model="showArea">
+        <select class="top-select" @change="changeShowArea" v-model="showArea">
           <option value="all">全部留言</option>
           <option value="self">只看我的</option>
         </select>
@@ -26,7 +26,7 @@
 
 import { messageStore } from '@/store/messageStore';
 import { userStore } from '@/store/userStore';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import MessageBody from './MessageBody.vue';
 import { selection } from '@/constants/messageSelection';
 
@@ -40,45 +40,40 @@ let acceptRefresh = ref(false);
 
 //计算剩余未加载的留言数
 const remainMessage = computed(()=>{
-  console.log('总数：'+msgs.messageTotal + '条\n长度：'+msgs.messageList.length);
   return msgs.messageTotal- msgs.messageList.length;
 });
 
 //加载留言
 const showMoreMessage = async ()=>{
-  acceptRefresh.value = true;
+  acceptRefresh.value = true; //阻断事件防止多次触发
   if(remainMessage.value >= 1){
-    msgs.page++;
-    await messageStore().queryMessageAction(msgs.page)
+    await msgs.queryMessageAction(msgs.page)
   }
   acceptRefresh.value = false;
 }
 
 //登录后立即加载留言
-watch(()=>userStore().userInfo.token,(token)=>{
+watch(()=>users.userInfo.token,(token)=>{
     if(token){
-      messageStore().queryMessageAction(msgs.page)
+      msgs.queryMessageAction(msgs.page)
     }
 })
-
-onMounted(()=>{
-  if(userStore().userInfo.token) messageStore().queryMessageAction(msgs.page);
-});
 
 //卸载组件时清除评论
 onUnmounted(()=>{
   msgs.cleanMessageAction();
 });
 
-watch(showArea,(v)=>{
-  msgs.cleanMessageAction();
-  if(v === selection.self){
+//切换查看全部留言或只看当前账号发布的留言
+const changeShowArea = ()=>{
+  msgs.cleanMessageAction();  //先清空原来的留言
+  if(showArea.value === selection.self){
     msgs.queryMessageByusernameAction(users.userInfo.username!,msgs.page);
   }
   else{
     msgs.queryMessageAction(msgs.page)
   }
-})
+}
 
 
 </script>

@@ -10,7 +10,7 @@
         <div class="head">
           <div class="avatar"></div>
           <p class="avatar-text">
-            {{ userData.userInfo.value.username }}
+            {{ users.userInfo.username }}
           </p>
         </div>
         <div class="base-info" >
@@ -62,27 +62,23 @@
 <script setup lang="ts">
 
 import {  ref, watch } from 'vue';
-// import '@/styles/loginAndSignup.css'
 import { useRouter } from 'vue-router';
 import { userStore } from '@/store/userStore';
-import { storeToRefs } from 'pinia';
 import '@/styles/userCenter.css'
 import { toastStore } from '@/store/toastStore';
 import type { LoginResponse } from '@/interface/User';
 import userVerify from '@/utils/userVerify';
-import Carousel from '@/components/Carousel.vue';
 
-const user = userStore();
-const userData = storeToRefs(user);
+const users = userStore();
 
 const {usernameLimit,emailLimit,nameLimit,telephoneLimit} = userVerify.LIMIT;
 
 //得到一个用户数据副本
-let showData = ref<LoginResponse>(JSON.parse(JSON.stringify(userData.userInfo.value)));
+let showData = ref<LoginResponse>(JSON.parse(JSON.stringify(users.userInfo)));
 
 //退出登录
 const exit = ()=>{
-  user.exit();
+  users.exit();
   toastStore().show('已退出登录');
 }
 
@@ -110,17 +106,17 @@ const modifyInfo = async ()=>{
     return;
   }
 
-  const result = await user.modifyInfoAction(showData.value);
+  const result = await users.modifyInfoAction(showData.value);
   if(result)
   {
-    Object.assign(user.userInfo,showData.value);
-    showData.value = JSON.parse(JSON.stringify(userData.userInfo.value));
+    Object.assign(users.userInfo,showData.value);
+    showData.value = JSON.parse(JSON.stringify(users.userInfo));
   }
 }
 
 //如果用户修改了信息则显示提交修改按钮
 watch(showData,()=>{
-  if(JSON.stringify(showData.value) === JSON.stringify(userData.userInfo.value)){
+  if(JSON.stringify(showData.value) === JSON.stringify(users.userInfo)){
     isEditMode.value = false;
   }
   else{
@@ -133,15 +129,11 @@ watch(showData,()=>{
 const router = useRouter();
 
 // 监听登录状态，若未登录则跳到登录页
-watch(userData.isLogin,()=>{
-  if(!userData.isLogin.value){
+watch(()=>users.isLogin,(isLogin)=>{
+  if(!isLogin){
     router.replace({
       name:'login'
     });
   }
-},{
-  // 首次加载也要判断
-  immediate:true
-}
-);
+},{immediate:true});// 首次加载也要判断
 </script>

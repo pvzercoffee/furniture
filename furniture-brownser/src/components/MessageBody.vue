@@ -27,18 +27,15 @@
 </template>
 
 <script setup lang="ts">
-import { queryMessage } from '@/api/queryMessage.api';
 import { messageStore } from '@/store/messageStore';
 import { toastStore } from '@/store/toastStore';
 import { userStore } from '@/store/userStore';
 import { ref } from 'vue';
 
-
-const props = defineProps(['data']);
-
-const focu = ref(false);
-
-const toast = toastStore();
+const props = defineProps(['data']);  //外部提供留言数据
+const focu = ref(false);  //删除按钮是否可用
+const toast = toastStore(); //全局消息toast
+const msgs = messageStore();  //留言状态store
 
 //删除指定的留言，html传入留言id
 const deleteMessage = async (message_id:number)=>{
@@ -46,7 +43,7 @@ const deleteMessage = async (message_id:number)=>{
   focu.value = true;  //禁止按钮点击。多次发起请求
 
   //执行删除
-  const result = await messageStore().deleteMessageAction(message_id);
+  const result = await msgs.deleteMessageAction(message_id);
   if(result){
     toast.show('删除成功');
   }
