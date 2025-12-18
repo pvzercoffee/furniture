@@ -51,36 +51,31 @@ public class UserServiceImpl implements UserService {
         userMapper.signup(user);
     }
 
+    //登录业务
     @Override
     public LoginInfo login(User user) {
 
         //LoginInfo不下发密码，因此查询结果用User封装
-        User result =  userMapper.login(user);
-
-        System.out.println(securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()));
+        User result =  userMapper.login(user.getUsername());
 
         //密码错误抛异常
-        if(!securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()))
-        {
+        if(result == null ||  !securityConfig.passwordEncoder().matches(user.getPassword(),result.getPassword()))
             throw new SelectErrorException();
-        }
 
-        //密码正确的情况下封装LoginInfo
-        LoginInfo loginInfo = new LoginInfo();
-
-        loginInfo.setEmail(result.getEmail());
-        loginInfo.setName(result.getName());
-        loginInfo.setGender(result.getGender());
-        loginInfo.setTelephone(result.getTelephone());
-        loginInfo.setUsername(result.getUsername());
-        loginInfo.setBirthday(result.getBirthday());
-
-        //把id作为令牌载荷
+        //密码正确把id作为令牌载荷
         Map<String,Object> claims = new HashMap<>();
         claims.put("id",result.getId());
 
         //创建令牌并传给LoginInfo
-        loginInfo.setToken(JwtUtils.generateToken(claims));
+        String token = JwtUtils.generateToken(claims);
+
+        //封装LoginInfo信息和token
+        LoginInfo loginInfo = new LoginInfo(result.getUsername(),result.getEmail(),result.getName(),
+                result.getTelephone(),result.getBirthday(),result.getGender(),token);
+
+        //更新最后更新日期
+        userMapper.updateLoginTime(result.getId());
+
         //登陆成功会返回信息和和令牌，不成功则是一个null
         return loginInfo;
     }
@@ -103,8 +98,8 @@ public class UserServiceImpl implements UserService {
         user.setId(CurrentHolder.getCurrentId());
         //给密码加密
         if(user.getPassword() != null){
-            String encodeingPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodeingPassword);
+            String encodingPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodingPassword);
         }
 
         userMapper.modify(user);

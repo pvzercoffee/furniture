@@ -29,42 +29,31 @@
 <script setup lang="ts">
 import { queryMessage } from '@/api/queryMessage.api';
 import { messageStore } from '@/store/messageStore';
+import { toastStore } from '@/store/toastStore';
 import { userStore } from '@/store/userStore';
-import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
 
 const props = defineProps(['data']);
-let {data} = props;
-if(!data) data = {
-  id:0,
-  username:'用户名',
-  name:'姓名',
-  telephone:'手机号',
-  email:'邮箱',
-  text:'正文',
-  createTime:'发表时间',
-  itemList:['分类列表1','分类列表2']
-}
 
 const focu = ref(false);
-const deleteNumber = ref(10);
 
+const toast = toastStore();
+
+//删除指定的留言，html传入留言id
 const deleteMessage = async (message_id:number)=>{
-  focu.value = true;
+
+  focu.value = true;  //禁止按钮点击。多次发起请求
+
+  //执行删除
   const result = await messageStore().deleteMessageAction(message_id);
   if(result){
-    const msg = messageStore();
-    if((msg.messageList.length-1)/msg.pageSize+1 < msg.page) msg.page--;
-    msg.messageList = [];
-    msg.messageTotal = 0;
-    for(let i = 1;i <= msg.page;i++){
-      await msg.queryMessageAction(i);
-      msg.update++;
-    }
+    toast.show('删除成功');
   }
-  focu.value = true;
-
+  else{
+    toast.show('删除失败');
+  }
+  focu.value = true;  //恢复按钮可点击
 }
 
 

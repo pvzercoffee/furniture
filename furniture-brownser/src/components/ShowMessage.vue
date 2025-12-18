@@ -3,17 +3,16 @@
     <div class="container">
       <div class="top">
         <p class="title">共有{{ msgs.messageTotal > 0 ? msgs.messageTotal : '...' }} 条留言</p>
-        <select class="top-select" v-model="msgs.messageSelection">
+        <select class="top-select" v-model="showArea">
           <option value="all">全部留言</option>
           <option value="self">只看我的</option>
         </select>
       </div>
-      <div :key="msgs.update">
+      <div>
         <MessageBody v-for="value in msgs.messageList" :key="value.id"  :data="value"/>
       </div>
 
       <button type="button" class="view-button"
-        :key="msgs.update"
         :disabled="acceptRefresh"
         @click="showMoreMessage">{{ remainMessage >= 1 ? `查看剩余${remainMessage}条留言` : '留言全部加载完毕' }}
 
@@ -27,7 +26,7 @@
 
 import { messageStore } from '@/store/messageStore';
 import { userStore } from '@/store/userStore';
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import MessageBody from './MessageBody.vue';
 import { selection } from '@/constants/messageSelection';
 
@@ -35,10 +34,13 @@ import { selection } from '@/constants/messageSelection';
 const msgs = messageStore();
 const users = userStore();
 
+let showArea = ref(selection.all);
+
 let acceptRefresh = ref(false);
 
 //计算剩余未加载的留言数
 const remainMessage = computed(()=>{
+  console.log('总数：'+msgs.messageTotal + '条\n长度：'+msgs.messageList.length);
   return msgs.messageTotal- msgs.messageList.length;
 });
 
@@ -68,9 +70,14 @@ onUnmounted(()=>{
   msgs.cleanMessageAction();
 });
 
-watch(()=>msgs.messageSelection,(v)=>{
+watch(showArea,(v)=>{
   msgs.cleanMessageAction();
-  messageStore().queryMessageAction(msgs.page)
+  if(v === selection.self){
+    msgs.queryMessageByusernameAction(users.userInfo.username!,msgs.page);
+  }
+  else{
+    msgs.queryMessageAction(msgs.page)
+  }
 })
 
 

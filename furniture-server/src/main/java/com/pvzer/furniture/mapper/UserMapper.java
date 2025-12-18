@@ -12,11 +12,15 @@ public interface UserMapper {
 
     //登录
     @Select("select * from users where username = #{username}")
-    public User login(User user);
+    User login(String username);
+
+    //更新最后登录时间
+    @Update("update users set last_login = now() where id = #{id}")
+    void updateLoginTime(Integer id);
 
     //根据句id查询用户信息
     @Select("select username,email,name,telephone,birthday,gender from users where id = #{id}")
-    public LoginInfo me(Integer id);
+    LoginInfo me(Integer id);
 
     //修改用户信息
     void modify(User user);

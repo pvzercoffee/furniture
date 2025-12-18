@@ -8,15 +8,14 @@ import { queryMessage } from "@/api/queryMessage.api";
 import { getPassTime } from "@/utils/getPassTime";
 import { deleteMessage } from "@/api/deleteMessage.api";
 import { queryMessageByUsername } from "@/api/queryMessageByUsername";
-import { selection } from "@/constants/messageSelection";
-import type { ResultInfo } from "@/interface/ResultInfo";
-import { userStore } from "./userStore";
 
 //获取评论后解析与封装到state
 const pushMessage = (res:any)=>{
   try{
 
       const {messages,total}:{messages:MessageResponse[],total:number} = res;
+      const msgs = messageStore();
+
       //转换日期
       messages.forEach((element:MessageResponse,index:number)=>{
         if(messages[index]?.createTime){
@@ -24,10 +23,10 @@ const pushMessage = (res:any)=>{
         }
       });
 
-      const msgs = messageStore();
       msgs.messageTotal = total;
-      msgs.messageList.push(...messages);
-      msgs.update++;
+      //把新留言合并到旧的留言、去重
+      msgs.messageList = [...new Map([...msgs.messageList,...messages].map(v=>[v.id,v])).values()]
+
       return msgs.messageList;
   }catch(e){
     if(e instanceof Error && e.message) toastStore().show('登录后才能留言'+e.message)
@@ -35,8 +34,6 @@ const pushMessage = (res:any)=>{
   }
 }
 
-//Toast消息提示
-// const toast = toastStore();
 
 export const messageStore = defineStore('useMessageStore',{
 
@@ -62,16 +59,7 @@ export const messageStore = defineStore('useMessageStore',{
     //查询留言
     async queryMessageAction(page:number){
 
-      let res:any;
-      if(this.messageSelection === selection.self){
-        const {userInfo} = userStore();
-        res = await queryMessageByUsername(userInfo.username!,page);
-        console.log(this.messageSelection);
-      }
-      else{
-        res = await queryMessage(page);
-        console.log(this.messageSelection);
-      }
+      let res = await queryMessage(page);
       return pushMessage(res);
 
     },
@@ -85,6 +73,14 @@ export const messageStore = defineStore('useMessageStore',{
     //删除留言
     async deleteMessageAction(message_id:number){
       const result = await deleteMessage(message_id);
+
+      if(result){
+        this.messageList = this.messageList.filter(v => v.id !== message_id);
+        this.messageTotal--;
+
+        this.page--;
+      }
+
       return result;
     },
 
@@ -103,8 +99,6 @@ export const messageStore = defineStore('useMessageStore',{
       messageTotal:0,
       page:1,
       pageSize : 10,
-      update:0,
-      messageSelection : selection.all
     }
   }
 });
