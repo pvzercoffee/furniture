@@ -60,30 +60,32 @@ public class MessageServiceImpl implements MessageService {
 
 
     //查询留言业务
-    public Map<String,Object> queryAll(Integer page, Integer pageSize) {
-        PageHelper.startPage(page,pageSize);
+    public Map<String,Object> queryAll(Integer index, Integer pageSize) {
+
+        System.out.println("***********************************");
+        System.out.println("索引："+index);
+        System.out.println("每页大小："+pageSize);
+
         //查出留言列表
-        List<MessageInfo> messageList = messageMapper.queryAll();
-        PageInfo<MessageInfo> pageInfo = new PageInfo<>(messageList);
+        List<MessageInfo> messageList = messageMapper.queryAll(index,pageSize);
+        Integer total = messageMapper.queryTotal();
+
 
         Map<String,Object> result =  queryResult(messageList);
-        result.put("total",pageInfo.getTotal());
-        System.out.println("总记录数："+pageInfo.getTotal());
+        result.put("total",total);
 
         return result;
     }
 
     //查出指定用户的留言的业务
     @Override
-    public Map<String, Object> queryByUsername(String username, Integer page, Integer pageSize) {
+    public Map<String, Object> queryByUsername(String username, Integer index, Integer pageSize) {
 
-        PageHelper.startPage(page,pageSize);
-        //查出留言列表
-        List<MessageInfo> messageList = messageMapper.queryByUsername(username);
-        PageInfo<MessageInfo> pageInfo = new PageInfo<>(messageList);
+        List<MessageInfo> messageList = messageMapper.queryByUsername(username,index,pageSize);
+        Integer total = messageMapper.queryTotal();
 
         Map<String,Object> result =  queryResult(messageList);
-        result.put("total",pageInfo.getTotal());
+        result.put("total",total);
 
         return result;
     }

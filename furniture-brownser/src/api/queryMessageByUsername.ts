@@ -4,11 +4,22 @@ import { messageStore } from "@/store/messageStore";
 import { userStore } from "@/store/userStore";
 import axios from "axios";
 
+interface RequestInfo{
+  username:string,
+  index:number,
+  pageSize:number,
+  token:string
+}
 
-export const queryMessageByUsername = async (username:string,page:number)=>{
-  const result = await axios.get(`${API_URL}/api/message/${username}?&page=${page}&pageSize=${messageStore().pageSize}`,{
+export const queryMessageByUsername = async (request:RequestInfo)=>{
+
+  const result = await axios.get(`${API_URL}/api/message/${request.username}`,{
+    params:{
+      index:request.index,
+      pageSize:request.pageSize
+    },
     headers:{
-      token:userStore().userInfo.token
+      token:request.token
     }
   });
 

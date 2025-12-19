@@ -8,6 +8,7 @@ import { queryMessage } from "@/api/queryMessage.api";
 import { getPassTime } from "@/utils/getPassTime";
 import { deleteMessage } from "@/api/deleteMessage.api";
 import { queryMessageByUsername } from "@/api/queryMessageByUsername";
+import { userStore } from "./userStore";
 
 //获取评论后解析与封装到state
 const pushMessage = (res:any)=>{
@@ -57,19 +58,29 @@ export const messageStore = defineStore('useMessageStore',{
     },
 
     //查询留言
-    async queryMessageAction(page:number){
-
-      const res = await queryMessage(page);
+    async queryMessageAction(){
+      const {token} = userStore().userInfo;
+      const res = await queryMessage({
+        index:this.index,
+        pageSize:this.pageSize,
+        token:token!
+      });
       pushMessage(res);
-      this.page++;
+      this.index+=this.pageSize;
 
     },
 
     //根据id查询留言
-    async queryMessageByusernameAction(username:string,page:number){
-      const res = await queryMessageByUsername(username,page);
+    async queryMessageByusernameAction(){
+      const {username,token} = userStore().userInfo;
+      const res = await queryMessageByUsername({
+        username:username!,
+        index:this.index,
+        pageSize:this.pageSize,
+        token:token!
+      });
       pushMessage(res);
-      this.page++;
+      this.index+=this.pageSize;
 
     },
 
@@ -81,7 +92,7 @@ export const messageStore = defineStore('useMessageStore',{
         this.messageList = this.messageList.filter(v => v.id !== message_id);
         this.messageTotal--;
 
-        this.page--;
+        this.index--;
       }
 
       return result;
@@ -90,7 +101,7 @@ export const messageStore = defineStore('useMessageStore',{
     //清空留言
     cleanMessageAction(){
       this.messageTotal = 0;
-      this.page = 1;
+      this.index = 0;
       this.messageList = [];
     }
   },
@@ -100,7 +111,7 @@ export const messageStore = defineStore('useMessageStore',{
       itemList:<ItemResponse[]>[],
       messageList:<MessageResponse[]>[],
       messageTotal:0,
-      page:1,
+      index:0,
       pageSize : 10,
     }
   }

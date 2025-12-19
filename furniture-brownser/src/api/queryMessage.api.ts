@@ -4,9 +4,19 @@ import { messageStore } from "@/store/messageStore";
 import { userStore } from "@/store/userStore";
 import axios from "axios";
 
+interface RequestInfo{
+  index:number,
+  pageSize:number,
+  token:string
+}
 
-export const queryMessage = async (page:number)=>{
-  const result = await axios.get(`${API_URL}/api/message?&page=${page}&pageSize=${messageStore().pageSize}`,{
+export const queryMessage = async (request:RequestInfo)=>{
+
+  const result = await axios.get(`${API_URL}/api/message`,{
+    params:{
+      index:request.index,
+      pageSize:request.pageSize
+    },
     headers:{
       token:userStore().userInfo.token
     }

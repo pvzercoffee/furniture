@@ -57,7 +57,7 @@ watch(()=>users.userInfo.token,(token)=>{
     if(token){
       msgs.queryMessageAction(msgs.page)
     }
-})
+},{immediate:true})
 
 //卸载组件时清除评论
 onUnmounted(()=>{

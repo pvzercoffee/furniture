@@ -28,8 +28,8 @@ public class MessageController {
 
     //查询留言
     @GetMapping
-    public Result queryAll(@RequestParam Integer page, @RequestParam Integer pageSize){
-        Map<String,Object> messageInfoList =  messageService.queryAll(page,pageSize);
+    public Result queryAll(@RequestParam Integer index, @RequestParam Integer pageSize){
+        Map<String,Object> messageInfoList =  messageService.queryAll(index,pageSize);
         return Result.success(messageInfoList);
     }
     //查询指定用户留言

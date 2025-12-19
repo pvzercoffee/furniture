@@ -17,6 +17,7 @@
         from messages msgs
             left join users on msgs.user_id = users.id
         order by create_time desc
+        limit #{index},#{pageSize}
     </select>
 
     <select id="queryByUsername">
@@ -32,6 +33,7 @@
                  left join users on msgs.user_id = users.id
         where users.username = #{username}
         order by create_time desc
+        limit #{index},#{pageSize}
     </select>
 
 </mapper>

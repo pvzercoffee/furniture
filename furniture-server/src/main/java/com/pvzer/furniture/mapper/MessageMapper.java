@@ -15,11 +15,14 @@ public interface MessageMapper {
     @Insert("insert into messages(user_id,name,telephone,email,text) value (#{userId},#{name},#{telephone},#{email},#{text})")
     void addToMessages(Message message);
 
+    //查询留言总数
+    @Select("select count(*) from messages")
+    Integer queryTotal();
     //查询留言内容
-    List<MessageInfo> queryAll();
+    List<MessageInfo> queryAll(Integer index,Integer pageSize);
 
     //查询指定用户的留言内容
-    List<MessageInfo> queryByUsername(String username);
+    List<MessageInfo> queryByUsername(String username,Integer index,Integer pageSize);
 
     //查询指定id发布的留言id
     @Select("select m.id from messages m where m.user_id = #{id}")
