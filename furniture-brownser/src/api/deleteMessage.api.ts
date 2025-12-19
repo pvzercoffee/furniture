@@ -3,12 +3,16 @@ import { toastStore } from "@/store/toastStore";
 import { userStore } from "@/store/userStore";
 import axios from "axios";
 
+interface RequestInfo{
+  message_id:number,
+  token:string
+}
 
-export const deleteMessage = async (message_id:number)=>{
+export const deleteMessage = async (request:RequestInfo)=>{
   try{
-    const result = await axios.delete(`${API_URL}/api/message/${message_id}`,{
+    const result = await axios.delete(`${API_URL}/api/message/${request.message_id}`,{
       headers:{
-        token:userStore().userInfo.token
+        token:request.token
       }
     });
 

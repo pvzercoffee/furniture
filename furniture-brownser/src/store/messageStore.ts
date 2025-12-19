@@ -34,7 +34,10 @@ const pushMessage = (res:any)=>{
     return [];
   }
 }
-
+//获取用户token
+const getToken = ()=>{
+  return userStore().userInfo.token;
+}
 
 export const messageStore = defineStore('useMessageStore',{
 
@@ -47,7 +50,10 @@ export const messageStore = defineStore('useMessageStore',{
     //添加留言
     async addMessageAction(message:MessageInfo){
       try{
-        return await addMessage(message);
+        return await addMessage({
+          message:message,
+          token:getToken()!
+        });
       }
       catch(e){
         if(e instanceof Error){
@@ -86,12 +92,14 @@ export const messageStore = defineStore('useMessageStore',{
 
     //删除留言
     async deleteMessageAction(message_id:number){
-      const result = await deleteMessage(message_id);
+      const result = await deleteMessage({
+        message_id:message_id,
+        token:getToken()!
+      });
 
       if(result){
         this.messageList = this.messageList.filter(v => v.id !== message_id);
         this.messageTotal--;
-
         this.index--;
       }
 

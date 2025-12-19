@@ -47,7 +47,7 @@ const remainMessage = computed(()=>{
 const showMoreMessage = async ()=>{
   acceptRefresh.value = true; //阻断事件防止多次触发
   if(remainMessage.value >= 1){
-    await msgs.queryMessageAction(msgs.page)
+    await msgs.queryMessageAction()
   }
   acceptRefresh.value = false;
 }
@@ -55,7 +55,7 @@ const showMoreMessage = async ()=>{
 //登录后立即加载留言
 watch(()=>users.userInfo.token,(token)=>{
     if(token){
-      msgs.queryMessageAction(msgs.page)
+      msgs.queryMessageAction()
     }
 },{immediate:true})
 
@@ -68,10 +68,10 @@ onUnmounted(()=>{
 const changeShowArea = ()=>{
   msgs.cleanMessageAction();  //先清空原来的留言
   if(showArea.value === selection.self){
-    msgs.queryMessageByusernameAction(users.userInfo.username!,msgs.page);
+    msgs.queryMessageByusernameAction();
   }
   else{
-    msgs.queryMessageAction(msgs.page)
+    msgs.queryMessageAction()
   }
 }
 

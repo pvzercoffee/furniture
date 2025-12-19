@@ -24,15 +24,15 @@ import { ref, watch } from 'vue';
 let title = ref('欢迎来到精美家具');
 const users = userStore();
 
-watch(()=>users.userInfo.gender,(gender)=>{
+watch(()=>users.userInfo,(info)=>{
   if(users.isLogin){
-    const {name} = users.userInfo;
-    title.value = name + (gender == 1 ? '先生' : '女士') + '，欢迎来到精美家居';
+
+    title.value = info.name + (info.gender == 1 ? '先生' : '女士') + '，欢迎来到精美家居';
   }
   else{
     title.value = '欢迎来到精美家居';
   }
-},{immediate:true});
+},{immediate:true,deep:true});
 
 </script>
 

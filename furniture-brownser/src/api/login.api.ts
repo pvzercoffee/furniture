@@ -2,10 +2,15 @@ import { API_URL } from "@/constants/ApiConfig";
 import type { ResultInfo } from "@/interface/ResultInfo";
 import axios from "axios";
 
-export async function login(username:string,password:string):Promise<ResultInfo>{
+interface RequestInfo {
+  username:string,
+  password:string
+}
+
+export async function login(requst:RequestInfo):Promise<ResultInfo>{
   const result = await axios.post(API_URL+'/api/login',{
-    username:username,
-    password:password
+    username:requst.username,
+    password:requst.password
   })
 
   if(result.status != 200) throw new Error('出现异常！错误码：'+result.status);

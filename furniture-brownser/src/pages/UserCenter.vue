@@ -28,8 +28,8 @@
           <div class="info-list">
             <p class="base-info-item">性别：</p>
             <select v-model.number="showData.gender" class="info-input">
-              <option value="1">男</option>
-              <option value="0">女</option>
+              <option :value="1">男</option>
+              <option :value="0">女</option>
             </select>
           </div>
           <hr class="item-split" />
@@ -61,32 +61,30 @@
 
 <script setup lang="ts">
 
-import {  ref, watch } from 'vue';
+import {  computed, reactive, ref, toRaw, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { userStore } from '@/store/userStore';
 import '@/styles/userCenter.css'
 import { toastStore } from '@/store/toastStore';
-import type { LoginResponse } from '@/interface/User';
 import userVerify from '@/utils/userVerify';
+import type { LoginResponse } from '@/interface/User';
 
 const users = userStore();
 
 const {usernameLimit,emailLimit,nameLimit,telephoneLimit} = userVerify.LIMIT;
 
 //得到一个用户数据副本
-let showData = ref<LoginResponse>(JSON.parse(JSON.stringify(users.userInfo)));
+let showData:LoginResponse = reactive({...users.userInfo})
 
 //退出登录
 const exit = ()=>{
   users.exit();
   toastStore().show('已退出登录');
 }
-
 //修改个人信息
-let isEditMode = ref(false);
 const modifyInfo = async ()=>{
 
-  const {username,name,email,telephone} = showData.value;
+  const {username,name,email,telephone} = showData;
   const {isUsernameValid,isNameValid,isEmailValid,isTelephoneValid} = userVerify;
 
   if(!isUsernameValid(username!)){
@@ -106,25 +104,27 @@ const modifyInfo = async ()=>{
     return;
   }
 
-  const result = await users.modifyInfoAction(showData.value);
+  const result = await users.modifyInfoAction(showData);
   if(result)
   {
-    Object.assign(users.userInfo,showData.value);
-    showData.value = JSON.parse(JSON.stringify(users.userInfo));
+    Object.assign(users.userInfo,showData);
   }
 }
 
-//如果用户修改了信息则显示提交修改按钮
-watch(showData,()=>{
-  if(JSON.stringify(showData.value) === JSON.stringify(users.userInfo)){
-    isEditMode.value = false;
-  }
-  else{
-    isEditMode.value = true;
-  }
+const isEditMode = computed(() => {
+  // 1. 定义表单里实际存在的字段
+  const fields = ['username', 'name', 'gender', 'email', 'telephone', 'birthday'] as const;
 
-},{deep:true})
+  // 2. 只要有一个字段对不上，就认为被修改了
+  // .some 会在找到第一个差异时立即停止，性能更高
+  return fields.some(key => {
+    // 强制转为字符串比对，抹平 1 vs "1" 或者 null vs "" 的所有差异
+    const original = String(users.userInfo[key] ?? '');
+    const current = String(showData[key] ?? '');
 
+    return original !== current;
+  });
+});
 
 const router = useRouter();
 

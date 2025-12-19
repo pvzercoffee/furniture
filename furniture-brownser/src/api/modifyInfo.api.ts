@@ -5,12 +5,16 @@ import { toastStore } from "@/store/toastStore";
 import { userStore } from "@/store/userStore";
 import axios from "axios";
 
+interface RequestInfo {
+  info:LoginResponse,
+  token:string
+}
 
-export const modifyInfo = async (info:LoginResponse)=>{
+export const modifyInfo = async (request:RequestInfo)=>{
   try{
-    const result = await axios.put(`${API_URL}/api/user`,info,{
+    const result = await axios.put(`${API_URL}/api/user`,request.info,{
       headers:{
-        token:userStore().userInfo.token
+        token:request.token
       }
     });
 

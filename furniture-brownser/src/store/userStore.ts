@@ -14,7 +14,10 @@ export const userStore = defineStore('userStore',{
     async loginAction(username:string,password:string){
 
       try{
-        const result:ResultInfo = await login(username,password);
+        const result:ResultInfo = await login({
+          username:username,
+          password:password
+        });
         const data:LoginResponse = result.data as LoginResponse;
 
         this.userInfo = data;
@@ -70,7 +73,10 @@ export const userStore = defineStore('userStore',{
 
     //修改用户信息逻辑
     async modifyInfoAction(info:LoginResponse){
-      return await modifyInfo(info);
+      return await modifyInfo({
+        info:info,
+        token:this.userInfo.token!
+      });
     }
   },
 

@@ -3,10 +3,15 @@ import type { MessageInfo } from "@/interface/Message";
 import { userStore } from "@/store/userStore";
 import axios from "axios";
 
-export const addMessage = async (message:MessageInfo)=>{
-  const result = await axios.post(API_URL+'/api/message',message,{
+interface RequestInfo{
+  message:MessageInfo,
+  token:string
+}
+
+export const addMessage = async (request:RequestInfo)=>{
+  const result = await axios.post(API_URL+'/api/message',request.message,{
     headers:{
-      token:userStore().userInfo.token
+      token:request.token
     }
   });
 
