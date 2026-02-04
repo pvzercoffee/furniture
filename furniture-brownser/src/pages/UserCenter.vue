@@ -52,6 +52,9 @@
           <button type="button" class="click-text" v-show="isEditMode" @click="modifyInfo">修改信息</button>
           <button type="button" class="click-text" @click="exit">退出登录</button>
 
+
+          <div class="setting"></div>
+
         </div>
       </div>
     </div>

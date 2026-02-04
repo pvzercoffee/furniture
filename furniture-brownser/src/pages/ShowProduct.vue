@@ -1,6 +1,6 @@
 <template>
     <main>
-        <BaseDialog class="dialog" ref="dialog" :message="dialogMessage"/>
+        <ProductDetail class="dialog" ref="dialog" :message="dialogMessage"/>
         <p style="margin-left: 20px;">热销商品</p>
         <div class="show-box">
             <div class="show-left">
@@ -18,7 +18,7 @@
 </template>
 <script setup lang="ts">
 import Double12Timeout from '@/components/Double12Timeout.vue';
-import BaseDialog from '@/components/BaseDialog.vue';
+import ProductDetail from '@/components/ProductDetail.vue';
 import { reactive, ref } from 'vue';
 import type { ProductInfo } from '@/interface/DialogInfo';
 import '@/styles/showProducts.css'

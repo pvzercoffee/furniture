@@ -1,4 +1,4 @@
-create table items(
+create table if not exists items(
     id int primary key auto_increment comment '主键，id',
     name varchar(100) unique comment '咨询分类名称'
 );
@@ -6,7 +6,7 @@ create table items(
 insert into items(name) values
 ('床上用品'),('家居饰品'),('居家日用'),('家居收纳'),('厨房收纳'),('厨房餐饮');
 
-create table messages(
+create table if not exists messages(
     id int primary key auto_increment comment '主键，id',
     user_id int not null comment '发表者id，外键指向用户表的id',
     name varchar(200) comment '咨询者姓名',
@@ -15,12 +15,14 @@ create table messages(
     foreign key (user_id) references users(id)
 );
 alter table messages add text varchar(2000) not null comment '正文';
-alter table messages add create_time datetime not null default now() comment '评论发表时间'
+alter table messages add create_time datetime not null default now() comment '评论发表时间';
 
-create table message_items_link(
+create table if not exists message_items_link(
     message_id int not null comment '外键关联留言主键',
     item_id int not null comment '外键关联项目主键',
     primary key (message_id,item_id),
     foreign key (message_id) references messages(id),
     foreign key (item_id) references items(id)
 ) comment '咨询和分类的多对多关联表';
+
+ALTER TABLE messages ADD COLUMN create_time DATETIME DEFAULT CURRENT_TIMESTAMP;

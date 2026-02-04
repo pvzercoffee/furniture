@@ -1,7 +1,5 @@
 package com.pvzer.furniture.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.pvzer.furniture.mapper.ItemsMapper;
 import com.pvzer.furniture.mapper.MessageItemsLink;
 import com.pvzer.furniture.mapper.MessageMapper;
@@ -57,8 +55,6 @@ public class MessageServiceImpl implements MessageService {
 
         return result;
     }
-
-
     //查询留言业务
     public Map<String,Object> queryAll(Integer index, Integer pageSize) {
 
@@ -69,7 +65,6 @@ public class MessageServiceImpl implements MessageService {
         //查出留言列表
         List<MessageInfo> messageList = messageMapper.queryAll(index,pageSize);
         Integer total = messageMapper.queryTotal();
-
 
         Map<String,Object> result =  queryResult(messageList);
         result.put("total",total);
